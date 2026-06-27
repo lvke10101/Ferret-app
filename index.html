@@ -102,10 +102,12 @@
   .header-bell-badge { position:absolute; top:-4px; right:-4px; min-width:17px; height:17px; padding:0 4px; border-radius:9px; background:var(--red2); color:#fff; font-size:10px; font-weight:700; display:flex; align-items:center; justify-content:center; line-height:1; }
 
   /* Nav pill row (My Semester · News Feed) */
-  .nav-pill-row { background:var(--surface); border-bottom:1px solid var(--border); padding:14px 16px; display:flex; align-items:center; justify-content:center; gap:14px; }
-  .nav-pill { display:flex; align-items:center; gap:8px; padding:9px 18px; border-radius:999px; border:1px solid var(--border2); background:var(--card); font-size:13.5px; font-weight:600; color:var(--text2); cursor:pointer; white-space:nowrap; }
-  .nav-pill svg { width:16px; height:16px; flex-shrink:0; }
-  .nav-pill.active { color:var(--gold); border-color:var(--gold); background:rgba(212,168,67,0.08); }
+  .nav-pill-row { background:var(--surface); border-bottom:1px solid var(--border); padding:14px 16px; display:flex; align-items:center; justify-content:center; gap:18px; }
+  .nav-pill { display:flex; align-items:center; cursor:pointer; white-space:nowrap; background:none; border:1px solid transparent; border-radius:999px; padding:6px 10px; transition:border-color 0.2s, background 0.2s; }
+  .nav-pill-main { display:flex; align-items:center; gap:8px; font-size:13.5px; font-weight:600; color:var(--text2); }
+  .nav-pill svg { width:16px; height:16px; flex-shrink:0; color:var(--text2); }
+  .nav-pill.active { border-color:var(--border2); background:transparent; }
+  .nav-pill.active .nav-pill-main, .nav-pill.active svg { color:var(--gold); }
   .nav-pill-badge { min-width:18px; height:18px; padding:0 4px; border-radius:9px; background:var(--red2); color:#fff; font-size:10.5px; font-weight:700; display:flex; align-items:center; justify-content:center; line-height:1; }
   .nav-pill-divider { display:flex; align-items:center; gap:6px; color:var(--gold); flex-shrink:0; }
   .nav-pill-divider .line { width:26px; height:1px; background:var(--gold); opacity:0.5; }
@@ -190,7 +192,7 @@
   .btn-add:disabled:hover { background:var(--gold); }
   .totals-row td { background:var(--card); border-top:1px solid var(--border2); font-weight:600; font-size:12px; color:var(--text2); font-family:'DM Mono',monospace; }
   .totals-row .total-gpa { color:var(--gold); font-size:14px; }
-  .empty-state { padding:48px 16px; text-align:center; }
+  .empty-state { padding:48px 16px; text-align:center; background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); }
   .empty-state .icon { font-size:36px; margin-bottom:10px; opacity:0.3; }
   .empty-state p { color:var(--text3); font-size:13px; }
   .class-first { color:var(--green2); } .class-second-upper { color:#5dade2; } .class-second-lower { color:var(--gold); } .class-third { color:#e59866; } .class-pass { color:var(--text3); }
@@ -407,16 +409,20 @@
 
   <div class="nav-pill-row">
     <div class="nav-pill active">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 2 8l10 5 10-5-10-5z"/><path d="M6 11v5c0 1.5 2.7 3 6 3s6-1.5 6-3v-5"/></svg>
-      <span>My Semester</span>
+      <div class="nav-pill-main">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 2 8l10 5 10-5-10-5z"/><path d="M6 11v5c0 1.5 2.7 3 6 3s6-1.5 6-3v-5"/></svg>
+        <span>My Semester</span>
+      </div>
     </div>
     <div class="nav-pill-divider">
       <span class="line"></span><span class="diamond"></span><span class="line"></span>
     </div>
     <div class="nav-pill">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="15" rx="2"/><line x1="7" y1="9" x2="11" y2="9"/><line x1="7" y1="13" x2="17" y2="13"/><line x1="7" y1="16" x2="17" y2="16"/><line x1="14" y1="9" x2="17" y2="9"/></svg>
-      <span>News Feed</span>
-      <span class="nav-pill-badge">2</span>
+      <div class="nav-pill-main">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="15" rx="2"/><line x1="7" y1="9" x2="11" y2="9"/><line x1="7" y1="13" x2="17" y2="13"/><line x1="7" y1="16" x2="17" y2="16"/><line x1="14" y1="9" x2="17" y2="9"/></svg>
+        <span>News Feed</span>
+        <span class="nav-pill-badge">2</span>
+      </div>
     </div>
   </div>
 
@@ -476,7 +482,7 @@
       <span class="lock-status-text" id="lock-status-text">Locked</span>
     </div>
 
-    <div class="course-table-wrap">
+    <div class="course-table-wrap" id="course-table-wrap">
       <table>
         <thead>
           <tr>
@@ -491,6 +497,10 @@
         <tbody id="course-tbody"></tbody>
         <tfoot id="totals-foot"></tfoot>
       </table>
+    </div>
+    <div class="empty-state" id="empty-state-standalone" style="display:none;">
+      <div class="icon">📚</div>
+      <p>No courses yet. Tap <strong>Add Course</strong> to get started.</p>
     </div>
 
     <div class="note-section">
@@ -1727,17 +1737,20 @@ function renderTable() {
   const courses = userData.semesters[currentSem] || [];
   const tbody   = document.getElementById('course-tbody');
   const tfoot   = document.getElementById('totals-foot');
+  const tableWrap = document.getElementById('course-table-wrap');
+  const emptyWrap  = document.getElementById('empty-state-standalone');
 
   if (courses.length === 0) {
-    tbody.innerHTML = `<tr><td colspan="6"><div class="empty-state">
-      <div class="icon">📚</div>
-      <p>No courses yet. Tap <strong>Add Course</strong> to get started.</p>
-    </div></td></tr>`;
+    tbody.innerHTML = '';
     tfoot.innerHTML = '';
+    tableWrap.style.display = 'none';
+    emptyWrap.style.display = 'block';
     document.getElementById('sem-gpa-detail').textContent = '';
     applyCourseLock();
     return;
   }
+  tableWrap.style.display = 'block';
+  emptyWrap.style.display = 'none';
 
   tbody.innerHTML = courses.map((c, i) => {
     const gp    = GRADE_POINTS[c.grade] ?? null;
