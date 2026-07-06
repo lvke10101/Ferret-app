@@ -93,6 +93,52 @@
   #change-password-screen { display:none; min-height:100vh; flex-direction:column; background:var(--bg); }
   #change-password-screen header { justify-content:flex-start; gap:14px; }
   .cp-subtitle { font-size:13px; color:var(--text3); line-height:1.5; margin:-6px 0 20px; }
+
+  /* Credit History (static) */
+  #credit-history-screen { display:none; min-height:100vh; flex-direction:column; background:var(--bg); }
+  #credit-history-screen header { justify-content:flex-start; gap:14px; align-items:center; }
+  #credit-history-screen .edit-profile-header-title { flex:1; }
+  .ch-help-btn { width:34px; height:34px; border-radius:50%; border:1.5px solid var(--gold); background:none; color:var(--gold); display:flex; align-items:center; justify-content:center; cursor:pointer; flex-shrink:0; }
+  .ch-help-btn svg { width:17px; height:17px; }
+  .ch-content { padding:16px; padding-bottom:40px; }
+  .ch-balance-card { display:flex; align-items:center; gap:16px; background:var(--surface); border:1px solid var(--border); border-radius:16px; padding:18px 20px; margin-bottom:16px; }
+  .ch-coin-icon { width:40px; height:40px; flex-shrink:0; color:var(--gold); }
+  .ch-coin-icon svg { width:100%; height:100%; }
+  .ch-balance-label { font-size:13px; color:var(--text2); margin-bottom:2px; }
+  .ch-balance-value { font-size:28px; font-weight:700; color:var(--gold); }
+  .ch-search-row { display:flex; gap:10px; margin-bottom:14px; }
+  .ch-search-box { flex:1; display:flex; align-items:center; gap:8px; background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:10px 12px; color:var(--text3); }
+  .ch-search-box svg { width:16px; height:16px; flex-shrink:0; }
+  .ch-search-box input { flex:1; background:none; border:none; outline:none; color:var(--text); font-family:inherit; font-size:14px; }
+  .ch-search-box input::placeholder { color:var(--text3); }
+  .ch-filter-btn { display:flex; align-items:center; gap:6px; padding:10px 16px; border-radius:10px; background:none; border:1.5px solid var(--gold); color:var(--gold); font-family:inherit; font-size:13.5px; font-weight:600; cursor:pointer; white-space:nowrap; }
+  .ch-filter-btn svg { width:14px; height:14px; }
+  .ch-chips { display:flex; gap:8px; overflow-x:auto; margin-bottom:22px; padding-bottom:2px; }
+  .ch-chips::-webkit-scrollbar { display:none; }
+  .ch-chip { display:flex; align-items:center; gap:6px; padding:8px 14px; border-radius:20px; background:var(--surface); border:1px solid var(--border); color:var(--text2); font-family:inherit; font-size:13px; font-weight:500; cursor:pointer; white-space:nowrap; flex-shrink:0; }
+  .ch-chip svg { width:14px; height:14px; }
+  .ch-chip.active { background:var(--gold); border-color:var(--gold); color:var(--on-gold); font-weight:700; }
+  .ch-chip-red { color:var(--red2); font-weight:700; }
+  .ch-chip-green { color:var(--green2); font-weight:700; }
+  .ch-section-row { display:flex; align-items:center; justify-content:space-between; margin:0 2px 8px; }
+  .ch-section-title { font-size:15px; font-weight:700; color:var(--gold); }
+  .ch-view-all { font-size:12.5px; color:var(--text3); }
+  .ch-card { background:var(--surface); border:1px solid var(--border); border-radius:14px; overflow:hidden; margin-bottom:22px; }
+  .ch-item { display:flex; align-items:flex-start; gap:12px; padding:14px 16px; border-bottom:1px solid var(--border); }
+  .ch-item:last-child { border-bottom:none; }
+  .ch-item-icon { width:34px; height:34px; border-radius:50%; border:1.5px solid var(--border2); color:var(--gold); display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+  .ch-item-icon svg { width:16px; height:16px; }
+  .ch-item-body { flex:1; min-width:0; }
+  .ch-item-title { font-size:14.5px; font-weight:600; color:var(--text); }
+  .ch-item-sub { font-size:12.5px; color:var(--text3); margin-top:2px; }
+  .ch-item-right { text-align:right; flex-shrink:0; }
+  .ch-item-amount { font-size:14.5px; font-weight:700; }
+  .ch-item-amount.ch-neg { color:var(--red2); }
+  .ch-item-amount.ch-pos { color:var(--green2); }
+  .ch-item-time { font-size:11.5px; color:var(--text3); margin-top:3px; }
+  .ch-item-balance { font-size:11.5px; color:var(--gold); margin-top:2px; }
+  .ch-empty { padding:32px 16px; text-align:center; color:var(--text3); font-size:14px; }
+  .ch-load-more-btn { width:100%; padding:12px; margin-bottom:22px; border:1px solid var(--border2); border-radius:12px; background:var(--surface); color:var(--gold); font-weight:600; font-size:14px; cursor:pointer; }
   #app { display:none; min-height:100vh; flex-direction:column; }
   header { background:var(--surface); border-bottom:1px solid var(--border); padding:0 16px; display:flex; align-items:center; gap:12px; height:54px; flex-shrink:0; position:sticky; top:0; z-index:100; }
   .header-logo { font-family:'Playfair Display',serif; font-size:18px; color:var(--gold); }
@@ -797,11 +843,11 @@
         <span class="profile-item-label">Language</span>
         <span class="profile-item-arrow">›</span>
       </button>
-      <button class="profile-item">
+      <button class="profile-item" onclick="showCreditHistory()">
         <span class="profile-item-icon">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="9" r="6"/><circle cx="15" cy="15" r="6"/></svg>
         </span>
-        <span class="profile-item-label">Currencies</span>
+        <span class="profile-item-label">Credit History</span>
         <span class="profile-item-arrow">›</span>
       </button>
       <button class="profile-item" onclick="showAppearance()">
@@ -1073,6 +1119,60 @@
       <input type="password" id="cp-confirm-password" placeholder="Re-enter new password" autocomplete="new-password"/>
     </div>
     <button class="btn-full" id="cp-submit-btn" onclick="submitChangePassword()" style="margin-top:8px;">Update Password</button>
+  </div>
+</div>
+
+<!-- ══ CREDIT HISTORY SCREEN (static — not wired) ═══════════ -->
+<div id="credit-history-screen">
+  <header>
+    <button class="profile-back" onclick="hideCreditHistory()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+    </button>
+    <div class="edit-profile-header-title">Credit History</div>
+    <button class="ch-help-btn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 0 1 5 0c0 1.667-2.5 2-2.5 3.5"/><line x1="12" y1="16.5" x2="12" y2="16.6"/></svg>
+    </button>
+  </header>
+  <div class="ch-content">
+    <div class="ch-balance-card">
+      <span class="ch-coin-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><ellipse cx="12" cy="7" rx="7" ry="3"/><path d="M5 7v10c0 1.66 3.13 3 7 3s7-1.34 7-3V7"/><path d="M5 12c0 1.66 3.13 3 7 3s7-1.34 7-3"/></svg>
+      </span>
+      <div class="ch-balance-text">
+        <div class="ch-balance-label">Current Balance</div>
+        <div class="ch-balance-value" id="ch-balance-value">0</div>
+      </div>
+    </div>
+
+    <div class="ch-search-row">
+      <div class="ch-search-box">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" placeholder="Search actions..." disabled/>
+      </div>
+      <button class="ch-filter-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polygon points="4 4 20 4 14 12 14 19 10 21 10 12 4 4"/></svg>
+        Filter
+      </button>
+    </div>
+
+    <div class="ch-chips">
+      <button class="ch-chip active">All</button>
+      <button class="ch-chip"><span class="ch-chip-red">↓</span> Spent</button>
+      <button class="ch-chip"><span class="ch-chip-green">↑</span> Top-up</button>
+      <button class="ch-chip">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="16" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="8" y1="3" x2="8" y2="7"/><line x1="16" y1="3" x2="16" y2="7"/></svg>
+        This Week
+      </button>
+      <button class="ch-chip">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="16" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="8" y1="3" x2="8" y2="7"/><line x1="16" y1="3" x2="16" y2="7"/></svg>
+        This Month
+      </button>
+    </div>
+
+    <div class="ch-card">
+      <div id="ch-list"></div>
+    </div>
+    <button id="ch-load-more" class="ch-load-more-btn" style="display:none" onclick="loadCreditHistory(false)">Load more</button>
   </div>
 </div>
 
@@ -1709,6 +1809,8 @@ function renderCredits() {
   const headerAmt = document.getElementById('header-balance-amt');
   const headerBal = document.getElementById('header-balance');
   const popAmt = document.getElementById('hu-pop-balance-amt');
+  const chBal = document.getElementById('ch-balance-value');
+  if (chBal) chBal.textContent = userCredits;
   if (!headerAmt || !headerBal) return;
   headerAmt.textContent = userCredits;
   headerBal.classList.toggle('low', userCredits <= 2);
@@ -1721,14 +1823,19 @@ function renderCredits() {
 // balance, so it can't be tampered with via a crafted request. The function
 // checks balance >= cost atomically, so concurrent spends can't both succeed
 // past a stale read.
-async function spendCredits(cost, actionLabel) {
+// `reason` must match the CHECK constraint on credit_transactions.reason.
+async function spendCredits(cost, actionLabel, reason, referenceId = null) {
   if (!currentUser) return false;
   if (userCredits < cost) {
     // Fast local check just for snappy UI feedback — not relied on for security.
     showToast(`Insufficient credits — ${actionLabel} requires ${cost}C, you have ${userCredits}C`, true);
     return false;
   }
-  const { data, error } = await sb.rpc('spend_credits', { p_cost: cost });
+  const { data, error } = await sb.rpc('spend_credits', {
+    p_cost: cost,
+    p_reason: reason,
+    p_reference_id: referenceId
+  });
   if (error) {
     if (error.message && error.message.includes('Insufficient credits')) {
       await loadCredits();
@@ -1741,6 +1848,121 @@ async function spendCredits(cost, actionLabel) {
   userCredits = data;
   renderCredits();
   return true;
+}
+
+// ── Credit History: realtime + pagination ────────────────────
+let creditChannel = null;
+
+function subscribeCreditHistory(userId) {
+  if (creditChannel) return; // already subscribed
+  creditChannel = sb.channel(`credit-tx-${userId}`)
+    .on('postgres_changes', {
+      event: 'INSERT',
+      schema: 'public',
+      table: 'credit_transactions',
+      filter: `user_id=eq.${userId}`
+    }, (payload) => {
+      const tx = payload.new;
+      userCredits = tx.balance_after;
+      renderCredits();
+      prependCreditHistoryRow(tx);
+    })
+    .subscribe();
+}
+
+function unsubscribeCreditHistory() {
+  if (creditChannel) {
+    sb.removeChannel(creditChannel);
+    creditChannel = null;
+  }
+}
+
+let creditHistoryCursor = null; // { createdAt, id } of last row loaded
+
+async function loadCreditHistory(reset = false) {
+  const list = document.getElementById('ch-list');
+  if (reset) {
+    creditHistoryCursor = null;
+    list.innerHTML = '';
+  }
+
+  const { data, error } = await sb.rpc('get_credit_history', {
+    p_limit: 30,
+    p_before_created_at: creditHistoryCursor?.createdAt ?? null,
+    p_before_id: creditHistoryCursor?.id ?? null
+  });
+
+  if (error) {
+    showToast('Failed to load credit history: ' + error.message, true);
+    return;
+  }
+
+  if (reset && data.length === 0) {
+    list.innerHTML = '<div class="ch-empty">No credit activity yet.</div>';
+  }
+
+  data.forEach(appendCreditHistoryRow);
+
+  if (data.length > 0) {
+    const last = data[data.length - 1];
+    creditHistoryCursor = { createdAt: last.created_at, id: last.id };
+  }
+
+  const loadMoreBtn = document.getElementById('ch-load-more');
+  if (loadMoreBtn) loadMoreBtn.style.display = data.length < 30 ? 'none' : 'block';
+}
+
+const CREDIT_REASON_LABELS = {
+  signup_bonus:   'Signup bonus',
+  unlock_post:    'Unlocked post',
+  comment_post:   'Posted comment',
+  profile_save:   'Saved profile',
+  course_add:     'Added course',
+  autosave_batch: 'Course autosave',
+  course_import:  'Imported courses',
+  semester_note:  'Saved semester note',
+  admin_grant:    'Admin credit grant',
+  purchase:       'Credit purchase'
+};
+
+// Icon is purely decorative — same glyph set the static mock used,
+// swapped between up/down arrow depending on credit direction.
+function creditHistoryIconSVG(isCredit) {
+  return isCredit
+    ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 21V9"/><polyline points="7 14 12 9 17 14"/></svg>'
+    : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3v12"/><polyline points="7 10 12 15 17 10"/></svg>';
+}
+
+function creditHistoryRowHTML(tx) {
+  const label = CREDIT_REASON_LABELS[tx.reason] || tx.reason;
+  const isCredit = tx.delta > 0;
+  const sign = isCredit ? '+' : '';
+  const amtCls = isCredit ? 'ch-pos' : 'ch-neg';
+  const time = new Date(tx.created_at).toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit' });
+  return `
+    <div class="ch-item" data-id="${tx.id}">
+      <span class="ch-item-icon">${creditHistoryIconSVG(isCredit)}</span>
+      <div class="ch-item-body">
+        <div class="ch-item-title">${label}</div>
+      </div>
+      <div class="ch-item-right">
+        <div class="ch-item-amount ${amtCls}">${sign}${tx.delta}</div>
+        <div class="ch-item-time">${time}</div>
+        <div class="ch-item-balance">Balance: ${tx.balance_after}</div>
+      </div>
+    </div>`;
+}
+
+function appendCreditHistoryRow(tx) {
+  document.getElementById('ch-list').insertAdjacentHTML('beforeend', creditHistoryRowHTML(tx));
+}
+
+function prependCreditHistoryRow(tx) {
+  const list = document.getElementById('ch-list');
+  if (!list) return; // screen not mounted — realtime still kept userCredits current
+  const empty = list.querySelector('.ch-empty');
+  if (empty) empty.remove();
+  list.insertAdjacentHTML('afterbegin', creditHistoryRowHTML(tx));
 }
 
 // ── Notifications ──────────────────────────────────────────
@@ -1795,6 +2017,8 @@ function notifText(n) {
   const name = esc(notifActorName(n));
   if (n.type === 'reply') return `<b>${name}</b> replied to your comment`;
   if (n.type === 'announcement') return `<span class="notif-badge-ann">Announcement</span><b>${notifAnnouncementTitle(n)}</b>`;
+  if (n.type === 'credit_topup') return `<span class="notif-badge-ann">Top-up</span>`;
+  if (n.type === 'credit_bonus') return `<span class="notif-badge-ann">Bonus</span>`;
   return `<b>${name}</b> sent you a notification`;
 }
 
@@ -1949,6 +2173,7 @@ function launchApp() {
   buildMiniChips();
   switchYear(0, true);
   loadCredits();
+  subscribeCreditHistory(currentUser.id);
   // loadPosts() disabled — News Feed on hold.
   loadNotifications();
   startNotifPolling();
@@ -2699,9 +2924,11 @@ async function doLogout() {
   clearSessionPolicyState();
   currentUser = null; userData = null;
   stopNotifPolling();
+  unsubscribeCreditHistory();
   document.getElementById('profile-screen').style.display = 'none';
   document.getElementById('edit-profile-screen').style.display = 'none';
   document.getElementById('change-password-screen').style.display = 'none';
+  document.getElementById('credit-history-screen').style.display = 'none';
   document.getElementById('faq-screen').style.display = 'none';
   app.style.display = 'none';
   authScreen.style.display = 'flex';
@@ -3163,6 +3390,20 @@ function hideFAQ() {
   document.getElementById('profile-screen').style.display = 'flex';
 }
 
+// ── Credit History ─────────────────────────────────────────
+function showCreditHistory() {
+  document.getElementById('profile-screen').style.display = 'none';
+  document.getElementById('credit-history-screen').style.display = 'flex';
+  loadCreditHistory(true);
+  // No unsubscribe on close — realtime channel stays open app-wide
+  // so header balance keeps updating regardless of screen.
+}
+
+function hideCreditHistory() {
+  document.getElementById('credit-history-screen').style.display = 'none';
+  document.getElementById('profile-screen').style.display = 'flex';
+}
+
 // ── Appearance / theme ───────────────────────────────────────
 function getStoredTheme() {
   try { return localStorage.getItem('gv_theme') || 'dark'; } catch { return 'dark'; }
@@ -3204,7 +3445,7 @@ async function saveProfileEdits() {
   btn.disabled = true;
   btn.textContent = 'Saving…';
   try {
-    const ok = await spendCredits(CREDIT_COSTS.editProfile, 'Saving profile changes');
+    const ok = await spendCredits(CREDIT_COSTS.editProfile, 'Saving profile changes', 'profile_save');
     if (!ok) return;
 
     userData.username = username || fallbackName;
@@ -3334,7 +3575,7 @@ async function confirmCatalogImport() {
     if (!proceed) return;
   }
 
-  const ok = await spendCredits(CREDIT_COSTS.upload, 'Importing courses');
+  const ok = await spendCredits(CREDIT_COSTS.upload, 'Importing courses', 'course_import');
   if (!ok) return;
 
   userData.semesters[currentSem] = row.courses.map(c => ({
@@ -3383,7 +3624,7 @@ async function saveNote() {
   if (!ta) return;
   btn.disabled = true;
   try {
-    const ok = await spendCredits(CREDIT_COSTS.saveNote, 'Saving note');
+    const ok = await spendCredits(CREDIT_COSTS.saveNote, 'Saving note', 'semester_note');
     if (!ok) return;
     if (!userData.notes) userData.notes = {};
     userData.notes[currentSem] = ta.value;
@@ -3408,7 +3649,7 @@ function scheduleSave() {
       if (autosaveCount % AUTOSAVE_BATCH_SIZE === 0) {
         // Charge for the batch *after* the save succeeds, so a failed/short balance
         // never blocks the user's course data from being saved.
-        const ok = await spendCredits(CREDIT_COSTS.autosaveBatch, 'Auto-save (10 saves)');
+        const ok = await spendCredits(CREDIT_COSTS.autosaveBatch, 'Auto-save (10 saves)', 'autosave_batch');
         if (!ok) {
           // Insufficient credits — data is still saved, just surface the shortfall.
           console.warn('Autosave batch charge failed: insufficient credits');
@@ -3594,7 +3835,7 @@ function renderTotals(courses) {
 // ── Course actions ──────────────────────────────────────────
 async function addCourse() {
   if (courseLocked) return;
-  const ok = await spendCredits(CREDIT_COSTS.addCourse, 'Adding a course');
+  const ok = await spendCredits(CREDIT_COSTS.addCourse, 'Adding a course', 'course_add');
   if (!ok) return;
   const courses = userData.semesters[currentSem];
   courses.push({ code:'', title:'', units:'', grade:'' });
