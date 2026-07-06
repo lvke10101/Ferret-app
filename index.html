@@ -86,6 +86,8 @@
   .fp-actions .btn-full { margin:0; }
   .fp-cancel-btn { flex:1; padding:12px; border-radius:10px; background:var(--card); border:1px solid var(--border); color:var(--text2); font-family:inherit; font-size:14px; font-weight:600; cursor:pointer; }
   .fp-close-btn { width:100%; padding:12px; border-radius:10px; background:var(--card); border:1px solid var(--border); color:var(--text2); font-family:inherit; font-size:14px; font-weight:600; cursor:pointer; margin-top:16px; }
+  .fp-attempts { text-align:center; font-size:12px; color:var(--text3); margin-top:12px; }
+  .fp-attempts.zero { color:var(--red2); }
 
   /* Change password screen */
   #change-password-screen { display:none; min-height:100vh; flex-direction:column; background:var(--bg); }
@@ -595,6 +597,7 @@
         <button class="fp-cancel-btn" onclick="closeForgotPassword()">Cancel</button>
         <button class="btn-full" id="fp-submit-btn" onclick="submitForgotPassword()">Send Reset Link</button>
       </div>
+      <div id="fp-attempts-left" class="fp-attempts"></div>
     </div>
     <div id="fp-success-view" style="display:none;">
       <div class="fp-title">Check your email</div>
@@ -1468,6 +1471,9 @@ function openForgotPassword() {
   document.getElementById('fp-error').style.display = 'none';
   document.getElementById('fp-form-view').style.display = 'block';
   document.getElementById('fp-success-view').style.display = 'none';
+  const attemptsEl = document.getElementById('fp-attempts-left');
+  attemptsEl.textContent = '';
+  attemptsEl.classList.remove('zero');
   document.getElementById('fp-overlay').classList.add('open');
 }
 
@@ -1488,6 +1494,18 @@ async function submitForgotPassword() {
   btn.disabled = true;
   btn.textContent = 'Sending…';
   try {
+    const { data: rl, error: rlError } = await sb.rpc('check_and_log_reset_attempt', { p_email: email });
+    if (rlError) throw rlError;
+    const attemptsEl = document.getElementById('fp-attempts-left');
+    if (!rl.allowed) {
+      showToast('Too many reset attempts. Try again in 1 hour.', true);
+      closeForgotPassword();
+      return;
+    }
+    attemptsEl.textContent = rl.remaining > 0
+      ? `${rl.remaining} attempt${rl.remaining === 1 ? '' : 's'} left this hour.`
+      : 'No attempts left this hour.';
+    attemptsEl.classList.toggle('zero', rl.remaining === 0);
     const { error } = await sb.auth.resetPasswordForEmail(email, { redirectTo: RESET_PASSWORD_URL });
     if (error) throw error;
     document.getElementById('fp-form-view').style.display = 'none';
