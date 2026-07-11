@@ -1123,14 +1123,18 @@
   </div>
 
   <div id="tab-news" style="display:none;">
-    <div class="cs-wrap">
+    <!-- Coming-soon / downtime placeholder — kept in the DOM, hidden by
+         default. Flip this to style="display:flex;" and hide #nf-list to
+         reuse it during a real News Feed outage instead of writing a new
+         maintenance screen from scratch. -->
+    <div class="cs-wrap" id="news-coming-soon" style="display:none;">
       <div class="cs-icon">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="15" rx="2"/><line x1="7" y1="9" x2="11" y2="9"/><line x1="7" y1="13" x2="17" y2="13"/><line x1="7" y1="16" x2="17" y2="16"/><line x1="14" y1="9" x2="17" y2="9"/></svg>
       </div>
       <div class="cs-title">Coming Soon</div>
       <div class="cs-sub">The News Feed is being rebuilt. Check back later.</div>
     </div>
-    <div class="nf-list" id="nf-list" style="display:none;"></div>
+    <div class="nf-list" id="nf-list"></div>
   </div>
 </div>
 
@@ -1786,6 +1790,79 @@ function initBackButton() {
     }
   });
 }
+// ── Push notifications (Android) ──────────────────────────────
+// Listeners are registered once at boot (mirrors initBackButton()).
+// Channel creation + permission request happen per-launchApp() call via
+// requestPushPermission(), gated so the OS prompt fires at most once per
+// install and never during first-run onboarding (would stack two modal
+// prompts on a brand-new account).
+// NOTE: token registration is logged only — syncing it to a device_tokens
+// table and actually sending pushes is separate follow-up work, not part
+// of this step.
+function loadPushAskedPref() {
+  try { return localStorage.getItem('gv_push_asked') === '1'; } catch { return false; }
+}
+function savePushAskedPref() {
+  try { localStorage.setItem('gv_push_asked', '1'); } catch {}
+}
+
+function initPushListeners() {
+  if (!(window.Capacitor && window.Capacitor.isNativePlatform && window.Capacitor.isNativePlatform())) return;
+  const PushPlugin = window.Capacitor.Plugins && window.Capacitor.Plugins.PushNotifications;
+  if (!PushPlugin) return;
+  PushPlugin.addListener('registration', (token) => {
+    console.info('Push registration token:', token.value);
+    if (!currentUser) return; // token can arrive before login on first install
+    sb.from('device_tokens')
+      .upsert(
+        { user_id: currentUser.id, fcm_token: token.value, platform: 'android', updated_at: new Date().toISOString() },
+        { onConflict: 'user_id,fcm_token' }
+      )
+      .then(({ error }) => { if (error) console.error('Token upsert failed:', error.message); });
+  });
+  PushPlugin.addListener('registrationError', (err) => {
+    console.error('Push registration failed:', err.error);
+  });
+}
+
+async function requestPushPermission() {
+  if (!(window.Capacitor && window.Capacitor.isNativePlatform && window.Capacitor.isNativePlatform())) return;
+  const PushPlugin = window.Capacitor.Plugins && window.Capacitor.Plugins.PushNotifications;
+  if (!PushPlugin) return;
+
+  try {
+    await PushPlugin.createChannel({
+      id: 'default',
+      name: 'GradeVault',
+      description: 'Credits, replies, and announcements',
+      importance: 4,
+      visibility: 1
+    });
+  } catch (e) {
+    console.error('createChannel failed:', e);
+  }
+
+  // Don't prompt mid-onboarding — let that modal finish first; retried on
+  // the next launchApp() call once level/admissionYear are set.
+  if (userData && !(userData.level && userData.admissionYear)) return;
+  if (loadPushAskedPref()) return;
+
+  try {
+    const status = await PushPlugin.checkPermissions();
+    if (status.receive === 'prompt') {
+      await PushPlugin.requestPermissions();
+    }
+    savePushAskedPref();
+
+    const finalStatus = await PushPlugin.checkPermissions();
+    if (finalStatus.receive === 'granted') {
+      await PushPlugin.register();
+    }
+  } catch (e) {
+    console.error('Push permission/registration failed:', e);
+  }
+}
+
 const authError   = document.getElementById('auth-error');
 const authEmail   = document.getElementById('auth-email');
 const authPassword = document.getElementById('auth-password');
@@ -2823,10 +2900,12 @@ function launchApp() {
   switchYear(0, true);
   loadCredits();
   subscribeCreditHistory(currentUser.id);
-  // loadPosts() disabled — News Feed on hold.
+  // News Feed is live — loaded lazily in switchNewsTab() on first open,
+  // same pattern as bookmarks, not fetched eagerly here.
   loadNotifications();
   startNotifPolling();
   maybeShowOnboarding();
+  requestPushPermission();
 }
 
 // ── Onboarding (mandatory first-run: nickname, level, admission year) ──
@@ -2894,7 +2973,7 @@ function switchNewsTab(tab) {
   document.getElementById('tab-semester').style.display = tab === 'semester' ? '' : 'none';
   document.getElementById('tab-news').style.display = tab === 'news' ? '' : 'none';
   document.getElementById('stats-bar').style.display = tab === 'semester' ? '' : 'none';
-  // News Feed on hold — coming soon placeholder shown instead. loadPosts() disabled.
+  if (tab === 'news' && !newsLoaded) loadPosts();
 }
 
 // ── News Feed: data + render ──────────────────────────────────
@@ -4910,6 +4989,7 @@ initScrollFade();
 applyTheme(getStoredTheme());
 showAuthTab('login');
 initBackButton();
+initPushListeners();
 document.addEventListener('visibilitychange', () => {
   if (document.visibilityState === 'visible' && currentUser) stampActivity();
 });
