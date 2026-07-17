@@ -99,6 +99,8 @@
   .fp-close-btn:active { transform:scale(0.97); background:var(--overlay-soft2); transition:transform 0.08s; }
   .fp-attempts { text-align:center; font-size:12px; color:var(--text3); margin-top:12px; }
   .fp-attempts.zero { color:var(--red2); }
+  .fp-countdown { text-align:center; font-size:13px; color:var(--text2); margin-top:10px; font-variant-numeric:tabular-nums; }
+  .fp-countdown.zero { color:var(--red2); }
 
   /* Insufficient credits modal */
   .ic-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.6); z-index:300; align-items:center; justify-content:center; padding:20px; }
@@ -1099,6 +1101,8 @@
     <div id="fp-success-view" style="display:none;">
       <div class="fp-title">Check your email</div>
       <div class="fp-success" id="fp-success-text" style="display:block;"></div>
+      <div id="fp-countdown" class="fp-countdown" style="display:none;"></div>
+      <button class="fp-cancel-btn" id="fp-resend-btn" style="display:none;" onclick="submitForgotPassword()">Resend link</button>
       <button class="fp-close-btn" onclick="closeForgotPassword()">Close</button>
     </div>
   </div>
@@ -2715,6 +2719,7 @@ function setAuthError(msg) {
 const RESET_PASSWORD_URL = 'https://gradevault-al3.pages.dev/reset-password.html';
 
 function openForgotPassword() {
+  stopResetCountdown();
   document.getElementById('fp-email').value = authEmail.value.trim();
   document.getElementById('fp-error').style.display = 'none';
   document.getElementById('fp-form-view').style.display = 'block';
@@ -2727,6 +2732,52 @@ function openForgotPassword() {
 
 function closeForgotPassword() {
   document.getElementById('fp-overlay').classList.remove('open');
+  stopResetCountdown();
+}
+
+// ── Reset-link countdown ─────────────────────────────────────
+// Cosmetic only. Anchored to the server's `seconds_remaining` (a relative
+// delta already computed by request_password_reset), not to `expires_at`
+// compared against the client's own clock — this avoids any dependency on
+// client/server clock skew. Hitting zero here only reveals the Resend
+// button; request_password_reset is still the one that decides whether a
+// resend actually goes through.
+let resetCountdownInterval = null;
+
+function stopResetCountdown() {
+  if (resetCountdownInterval) {
+    clearInterval(resetCountdownInterval);
+    resetCountdownInterval = null;
+  }
+}
+
+function startResetCountdown(secondsRemaining) {
+  stopResetCountdown();
+  const el = document.getElementById('fp-countdown');
+  const resendBtn = document.getElementById('fp-resend-btn');
+  let remaining = Math.max(0, Math.floor(secondsRemaining));
+
+  const render = () => {
+    if (remaining <= 0) {
+      el.textContent = 'Link expired.';
+      el.classList.add('zero');
+      resendBtn.style.display = 'block';
+      stopResetCountdown();
+      return;
+    }
+    const mins = Math.floor(remaining / 60);
+    const secs = remaining % 60;
+    el.textContent = `Link valid for ${mins}:${String(secs).padStart(2, '0')}`;
+    el.classList.remove('zero');
+    resendBtn.style.display = 'none';
+  };
+
+  el.style.display = 'block';
+  render();
+  resetCountdownInterval = setInterval(() => {
+    remaining -= 1;
+    render();
+  }, 1000);
 }
 
 async function submitForgotPassword() {
@@ -2739,7 +2790,10 @@ async function submitForgotPassword() {
     return;
   }
   const btn = document.getElementById('fp-submit-btn');
+  const resendBtn = document.getElementById('fp-resend-btn');
+  if (resendBtn.disabled) return;
   btn.disabled = true;
+  resendBtn.disabled = true;
   btn.textContent = 'Sending…';
   try {
     // Idempotency + rate limit lives server-side in request_password_reset:
@@ -2763,15 +2817,18 @@ async function submitForgotPassword() {
       const { error } = await sb.auth.resetPasswordForEmail(email, { redirectTo: RESET_PASSWORD_URL });
       if (error) throw error;
       document.getElementById('fp-success-text').textContent =
-        `If an account exists for ${email}, a password reset link is on its way. It's valid for 15 minutes — open it on this device to set a new password.`;
+        `If an account exists for ${email}, a password reset link is on its way. Open it on this device to set a new password.`;
     } else {
       // Active link still valid — suppressed the resend rather than minting a
       // duplicate. Tell the user to use the existing email; don't imply a new
       // one was sent.
-      const mins = Math.max(1, Math.ceil((rl.seconds_remaining || 0) / 60));
       document.getElementById('fp-success-text').textContent =
+
         `A reset link was already sent to ${email} and is still valid for about ${mins} minute${mins === 1 ? '' : 's'}. Check your inbox (and spam) and use that link, we didn't send a new one.`;
+
     }
+    document.getElementById('fp-resend-btn').style.display = 'none';
+    startResetCountdown(rl.seconds_remaining || 0);
     document.getElementById('fp-form-view').style.display = 'none';
     document.getElementById('fp-success-view').style.display = 'block';
   } catch (err) {
@@ -2781,6 +2838,7 @@ async function submitForgotPassword() {
     errEl.style.display = 'block';
   } finally {
     btn.disabled = false;
+    resendBtn.disabled = false;
     btn.textContent = 'Send Reset Link';
   }
 }
