@@ -2770,7 +2770,7 @@ async function submitForgotPassword() {
       // one was sent.
       const mins = Math.max(1, Math.ceil((rl.seconds_remaining || 0) / 60));
       document.getElementById('fp-success-text').textContent =
-        `A reset link was already sent to ${email} and is still valid for about ${mins} minute${mins === 1 ? '' : 's'}. Check your inbox (and spam) and use that link — we didn't send a new one.`;
+        `A reset link was already sent to ${email} and is still valid for about ${mins} minute${mins === 1 ? '' : 's'}. Check your inbox (and spam) and use that link, we didn't send a new one.`;
     }
     document.getElementById('fp-form-view').style.display = 'none';
     document.getElementById('fp-success-view').style.display = 'block';
