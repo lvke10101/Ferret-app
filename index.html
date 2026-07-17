@@ -557,6 +557,15 @@
   .credited-ray-3 { --r:0deg;   animation-delay:0.6s; }
   .credited-ray-4 { --r:20deg;  animation-delay:0.2s; }
   .credited-ray-5 { --r:40deg;  animation-delay:0.5s; }
+  .credited-star { position:absolute; width:11px; height:11px; color:var(--gold2); opacity:0; animation: credited-twinkle 1.8s ease-in-out infinite; }
+  .credited-star svg { width:100%; height:100%; }
+  .credited-star-1 { top:2px; right:8px; animation-delay:0.3s; }
+  .credited-star-2 { bottom:6px; left:2px; width:8px; height:8px; animation-delay:0.9s; }
+  .credited-star-3 { top:14px; left:-4px; width:7px; height:7px; animation-delay:1.4s; }
+  @keyframes credited-twinkle {
+    0%, 100% { opacity:0; transform:scale(0.5) rotate(0deg); }
+    50%      { opacity:1; transform:scale(1) rotate(25deg); }
+  }
   @keyframes credited-pulse {
     0%   { box-shadow:0 0 0 0 rgba(61,168,108,0.5); transform:scale(0.9); }
     35%  { box-shadow:0 0 0 14px rgba(61,168,108,0); transform:scale(1.04); }
@@ -2203,6 +2212,9 @@
       <span class="credited-ray credited-ray-3"></span>
       <span class="credited-ray credited-ray-4"></span>
       <span class="credited-ray credited-ray-5"></span>
+      <span class="credited-star credited-star-1"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0 14 10 24 12 14 14 12 24 10 14 0 12 10 10Z"/></svg></span>
+      <span class="credited-star credited-star-2"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0 14 10 24 12 14 14 12 24 10 14 0 12 10 10Z"/></svg></span>
+      <span class="credited-star credited-star-3"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0 14 10 24 12 14 14 12 24 10 14 0 12 10 10Z"/></svg></span>
       <div class="credited-check-circle">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 12 9 17 20 6"/></svg>
       </div>
