@@ -2742,7 +2742,11 @@ async function submitForgotPassword() {
   btn.disabled = true;
   btn.textContent = 'Sending…';
   try {
-    const { data: rl, error: rlError } = await sb.rpc('check_and_log_reset_attempt', { p_email: email });
+    // Idempotency + rate limit lives server-side in request_password_reset:
+    // within 15 min of a sent link it returns should_send=false so we do NOT
+    // mint a second recovery token — the link already in the user's inbox
+    // stays the single valid credential with its original expiry.
+    const { data: rl, error: rlError } = await sb.rpc('request_password_reset', { p_email: email });
     if (rlError) throw rlError;
     const attemptsEl = document.getElementById('fp-attempts-left');
     if (!rl.allowed) {
@@ -2750,16 +2754,26 @@ async function submitForgotPassword() {
       closeForgotPassword();
       return;
     }
-    attemptsEl.textContent = rl.remaining > 0
-      ? `${rl.remaining} attempt${rl.remaining === 1 ? '' : 's'} left this hour.`
+    attemptsEl.textContent = rl.remaining_attempts > 0
+      ? `${rl.remaining_attempts} attempt${rl.remaining_attempts === 1 ? '' : 's'} left this hour.`
       : 'No attempts left this hour.';
-    attemptsEl.classList.toggle('zero', rl.remaining === 0);
-    const { error } = await sb.auth.resetPasswordForEmail(email, { redirectTo: RESET_PASSWORD_URL });
-    if (error) throw error;
+    attemptsEl.classList.toggle('zero', rl.remaining_attempts === 0);
+
+    if (rl.should_send) {
+      const { error } = await sb.auth.resetPasswordForEmail(email, { redirectTo: RESET_PASSWORD_URL });
+      if (error) throw error;
+      document.getElementById('fp-success-text').textContent =
+        `If an account exists for ${email}, a password reset link is on its way. It's valid for 15 minutes — open it on this device to set a new password.`;
+    } else {
+      // Active link still valid — suppressed the resend rather than minting a
+      // duplicate. Tell the user to use the existing email; don't imply a new
+      // one was sent.
+      const mins = Math.max(1, Math.ceil((rl.seconds_remaining || 0) / 60));
+      document.getElementById('fp-success-text').textContent =
+        `A reset link was already sent to ${email} and is still valid for about ${mins} minute${mins === 1 ? '' : 's'}. Check your inbox (and spam) and use that link — we didn't send a new one.`;
+    }
     document.getElementById('fp-form-view').style.display = 'none';
     document.getElementById('fp-success-view').style.display = 'block';
-    document.getElementById('fp-success-text').textContent =
-      `If an account exists for ${email}, a password reset link is on its way. Open it on this device to set a new password.`;
   } catch (err) {
     errEl.textContent = isNetworkError(err)
       ? "Network unavailable. Couldn't send the reset email."
