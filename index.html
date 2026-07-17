@@ -549,14 +549,25 @@
   .credited-close { position:absolute; top:16px; right:16px; width:30px; height:30px; border-radius:50%; border:none; background:none; color:var(--text3); display:flex; align-items:center; justify-content:center; cursor:pointer; -webkit-tap-highlight-color:transparent; }
   .credited-close svg { width:18px; height:18px; }
   .credited-icon-wrap { position:relative; width:96px; height:96px; margin:4px auto 20px; display:flex; align-items:center; justify-content:center; }
-  .credited-check-circle { position:relative; z-index:1; width:76px; height:76px; border-radius:50%; border:2.5px solid var(--green2); display:flex; align-items:center; justify-content:center; color:var(--green2); background:rgba(45,122,79,0.08); }
+  .credited-check-circle { position:relative; z-index:1; width:76px; height:76px; border-radius:50%; border:2.5px solid var(--green2); display:flex; align-items:center; justify-content:center; color:var(--green2); background:rgba(45,122,79,0.08); animation: credited-pulse 1.8s ease-out 0.15s 1; }
   .credited-check-circle svg { width:34px; height:34px; }
-  .credited-ray { position:absolute; top:-2px; left:50%; width:2.5px; height:12px; border-radius:2px; background:var(--green2); transform-origin:1.25px 50px; opacity:0.85; }
-  .credited-ray-1 { transform:translateX(-1.25px) rotate(-40deg); }
-  .credited-ray-2 { transform:translateX(-1.25px) rotate(-20deg); }
-  .credited-ray-3 { transform:translateX(-1.25px) rotate(0deg); }
-  .credited-ray-4 { transform:translateX(-1.25px) rotate(20deg); }
-  .credited-ray-5 { transform:translateX(-1.25px) rotate(40deg); }
+  .credited-ray { position:absolute; top:-2px; left:50%; width:2.5px; height:12px; border-radius:2px; background:var(--green2); transform-origin:1.25px 50px; opacity:0; transform:translateX(-1.25px) rotate(var(--r,0deg)); animation: credited-spark 1.4s ease-out infinite; }
+  .credited-ray-1 { --r:-40deg; animation-delay:0.1s; }
+  .credited-ray-2 { --r:-20deg; animation-delay:0.35s; }
+  .credited-ray-3 { --r:0deg;   animation-delay:0.6s; }
+  .credited-ray-4 { --r:20deg;  animation-delay:0.2s; }
+  .credited-ray-5 { --r:40deg;  animation-delay:0.5s; }
+  @keyframes credited-pulse {
+    0%   { box-shadow:0 0 0 0 rgba(61,168,108,0.5); transform:scale(0.9); }
+    35%  { box-shadow:0 0 0 14px rgba(61,168,108,0); transform:scale(1.04); }
+    100% { box-shadow:0 0 0 14px rgba(61,168,108,0); transform:scale(1); }
+  }
+  @keyframes credited-spark {
+    0%   { opacity:0; transform:translateX(-1.25px) rotate(var(--r,0deg)) scaleY(0.6); }
+    30%  { opacity:1; transform:translateX(-1.25px) rotate(var(--r,0deg)) scaleY(1.3); }
+    60%  { opacity:0.4; transform:translateX(-1.25px) rotate(var(--r,0deg)) scaleY(1); }
+    100% { opacity:0; transform:translateX(-1.25px) rotate(var(--r,0deg)) scaleY(0.6); }
+  }
   .credited-title { font-size:20px; font-weight:800; color:var(--text); margin-bottom:10px; }
   .credited-subtitle { font-size:14.5px; color:var(--text2); line-height:1.5; }
   .credited-amount { color:var(--green2); font-weight:800; }
