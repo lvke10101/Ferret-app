@@ -544,6 +544,24 @@
   .gv-modal-pen { position:absolute; top:16px; right:16px; width:34px; height:34px; border-radius:50%; border:1.5px solid var(--gold); background:none; color:var(--gold); display:flex; align-items:center; justify-content:center; cursor:pointer; -webkit-tap-highlight-color:transparent; transition:all 0.15s; }
   .gv-modal-pen:active { transform:scale(0.9); background:rgba(212,168,67,0.12); }
   .gv-modal-pen svg { width:15px; height:15px; }
+
+  .credited-card { padding:34px 26px 26px; }
+  .credited-close { position:absolute; top:16px; right:16px; width:30px; height:30px; border-radius:50%; border:none; background:none; color:var(--text3); display:flex; align-items:center; justify-content:center; cursor:pointer; -webkit-tap-highlight-color:transparent; }
+  .credited-close svg { width:18px; height:18px; }
+  .credited-icon-wrap { position:relative; width:96px; height:96px; margin:4px auto 20px; display:flex; align-items:center; justify-content:center; }
+  .credited-check-circle { position:relative; z-index:1; width:76px; height:76px; border-radius:50%; border:2.5px solid var(--green2); display:flex; align-items:center; justify-content:center; color:var(--green2); background:rgba(45,122,79,0.08); }
+  .credited-check-circle svg { width:34px; height:34px; }
+  .credited-ray { position:absolute; top:-2px; left:50%; width:2.5px; height:12px; border-radius:2px; background:var(--green2); transform-origin:1.25px 50px; opacity:0.85; }
+  .credited-ray-1 { transform:translateX(-1.25px) rotate(-40deg); }
+  .credited-ray-2 { transform:translateX(-1.25px) rotate(-20deg); }
+  .credited-ray-3 { transform:translateX(-1.25px) rotate(0deg); }
+  .credited-ray-4 { transform:translateX(-1.25px) rotate(20deg); }
+  .credited-ray-5 { transform:translateX(-1.25px) rotate(40deg); }
+  .credited-title { font-size:20px; font-weight:800; color:var(--text); margin-bottom:10px; }
+  .credited-subtitle { font-size:14.5px; color:var(--text2); line-height:1.5; }
+  .credited-amount { color:var(--green2); font-weight:800; }
+  .credited-divider { height:1px; background:var(--border); margin:18px 0 16px; }
+  .credited-tip { font-size:13px; color:var(--text3); }
   .gv-modal-icon-circle { width:76px; height:76px; border-radius:50%; background:rgba(212,168,67,0.12); display:flex; align-items:center; justify-content:center; margin:0 auto 18px; color:var(--gold); }
   .gv-modal-icon-circle svg { width:36px; height:36px; }
   .gv-modal-title { font-family:'Playfair Display',serif; font-size:22px; color:var(--text); margin-bottom:14px; }
@@ -2162,7 +2180,29 @@
   </div>
 </div>
 
-<!-- ══ ONBOARDING (step 1 mandatory; steps 2-3 dismissible) ═══ -->
+<!-- ══ CREDITED MODAL — shown on any positive credit grant (top-up, admin bonus, signup bonus) ══ -->
+<div class="gv-modal-overlay" id="credited-modal-overlay">
+  <div class="gv-modal-card credited-card">
+    <button class="credited-close" onclick="closeCreditedModal()" aria-label="Close">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+    <div class="credited-icon-wrap">
+      <span class="credited-ray credited-ray-1"></span>
+      <span class="credited-ray credited-ray-2"></span>
+      <span class="credited-ray credited-ray-3"></span>
+      <span class="credited-ray credited-ray-4"></span>
+      <span class="credited-ray credited-ray-5"></span>
+      <div class="credited-check-circle">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 12 9 17 20 6"/></svg>
+      </div>
+    </div>
+    <div class="credited-title">You've been credited!</div>
+    <div class="credited-subtitle"><span class="credited-amount" id="credited-amount">0C</span> has been added to your balance</div>
+    <div class="credited-divider"></div>
+    <div class="credited-tip">✨ Explore the app and make the most of it.</div>
+  </div>
+</div>
+
 <div id="onboard-overlay" class="onboard-overlay">
   <div class="onboard-sheet">
     <button class="onboard-close" id="onboard-close" onclick="finishOnboardingWizard()">
@@ -3174,8 +3214,24 @@ function subscribeCreditHistory(userId) {
       userCredits = tx.balance_after;
       renderCredits();
       prependCreditHistoryRow(tx);
+      // Any positive-delta credit transaction is a grant (top-up, admin
+      // bonus, signup bonus) — spends are negative delta, and the initial
+      // signup_ledger_marker row is delta 0, so this naturally excludes both
+      // without needing a hardcoded list of "grant" reasons.
+      if (tx.delta > 0) {
+        showCreditedModal(tx.delta);
+      }
     })
     .subscribe();
+}
+
+function showCreditedModal(amount) {
+  document.getElementById('credited-amount').textContent = amount + 'C';
+  document.getElementById('credited-modal-overlay').classList.add('open');
+}
+
+function closeCreditedModal() {
+  document.getElementById('credited-modal-overlay').classList.remove('open');
 }
 
 function unsubscribeCreditHistory() {
