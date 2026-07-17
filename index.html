@@ -99,8 +99,6 @@
   .fp-close-btn:active { transform:scale(0.97); background:var(--overlay-soft2); transition:transform 0.08s; }
   .fp-attempts { text-align:center; font-size:12px; color:var(--text3); margin-top:12px; }
   .fp-attempts.zero { color:var(--red2); }
-  .fp-countdown { text-align:center; font-size:13px; color:var(--text2); margin-top:10px; font-variant-numeric:tabular-nums; }
-  .fp-countdown.zero { color:var(--red2); }
 
   /* Insufficient credits modal */
   .ic-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.6); z-index:300; align-items:center; justify-content:center; padding:20px; }
@@ -158,13 +156,20 @@
   .topup-email-box input::placeholder { color:var(--text3); }
   .topup-hint { display:flex; gap:6px; align-items:flex-start; font-size:11.5px; color:var(--text3); line-height:1.4; margin-bottom:20px; }
   .topup-hint svg { flex-shrink:0; margin-top:1px; }
-  .topup-preset-grid { display:flex; gap:8px; margin-bottom:14px; }
-  .topup-preset { position:relative; flex:1; display:flex; flex-direction:column; align-items:center; gap:6px; padding:14px 4px 12px; border-radius:12px; border:1px solid var(--border2); background:var(--card); color:var(--text); font-family:inherit; font-size:14px; font-weight:700; cursor:pointer; transition:background 0.15s,border-color 0.15s; -webkit-tap-highlight-color:transparent; }
-  .topup-preset .credit-icon-inline { width:16px; height:16px; font-size:9.5px; }
-  .topup-preset:active { transform:scale(0.96); }
-  .topup-preset.active { background:var(--gold); border-color:var(--gold); color:var(--on-gold); }
-  .topup-preset.active .credit-icon-inline { background:var(--on-gold); color:var(--gold); }
-  .topup-popular-badge { position:absolute; top:-10px; left:50%; transform:translateX(-50%); background:var(--gold); color:var(--on-gold); font-size:8.5px; font-weight:700; letter-spacing:0.4px; padding:3px 7px; border-radius:6px; white-space:nowrap; }
+  .topup-preset-grid { display:flex; flex-direction:column; gap:8px; margin-bottom:14px; }
+  .topup-row { position:relative; width:100%; display:flex; align-items:center; gap:10px; padding:12px 14px; border-radius:11px; border:1px solid var(--border2); background:var(--card); color:var(--text); font-family:inherit; cursor:pointer; transition:background 0.15s,border-color 0.15s; -webkit-tap-highlight-color:transparent; }
+  .topup-row:active { transform:scale(0.99); }
+  .topup-row.active { border-color:var(--gold); }
+  .topup-row-radio { flex-shrink:0; width:18px; height:18px; border-radius:50%; border:2px solid var(--border2); }
+  .topup-row-radio.active { border-color:var(--gold); background:radial-gradient(circle, var(--gold) 0 42%, transparent 44%); }
+  .topup-row-label { font-size:14px; font-weight:700; color:var(--text); display:flex; align-items:center; gap:4px; white-space:nowrap; }
+  .topup-row-label .credit-icon-inline { width:16px; height:16px; font-size:9.5px; }
+  .topup-row-badge { flex-shrink:0; font-size:11px; font-weight:700; padding:3px 8px; border-radius:20px; white-space:nowrap; }
+  .topup-row-badge.hot { background:rgba(220,60,60,0.16); color:#e05a5a; }
+  .topup-row-badge.discount { background:rgba(220,60,60,0.16); color:#e05a5a; }
+  .topup-row-price { margin-left:auto; flex-shrink:0; display:flex; align-items:baseline; gap:7px; font-family:'DM Mono',monospace; }
+  .topup-row-price-current { font-size:14px; font-weight:700; color:var(--gold); }
+  .topup-row-price-old { font-size:12px; color:var(--text3); text-decoration:line-through; }
   .topup-or-divider { display:flex; align-items:center; gap:12px; margin:16px 0; font-size:11px; color:var(--text3); }
   .topup-or-divider::before, .topup-or-divider::after { content:''; flex:1; height:1px; background:var(--border); }
   .topup-custom-row { display:flex; align-items:center; gap:10px; background:var(--card); border:1px solid var(--border); border-radius:10px; padding:12px 14px; margin-bottom:18px; }
@@ -1012,13 +1017,11 @@
   .nf-reactions { display: flex; gap: 14px; padding: 7px 14px; border-top: 1px solid var(--border); }
   .nf-reaction { display: flex; align-items: center; gap: 5px; font-size: 12.5px; color: var(--text3); }
   .nf-reaction svg { width: 15px; height: 15px; }
+  .nf-view-count { display: flex; align-items: center; gap: 5px; font-size: 12.5px; color: var(--text3); margin-left: auto; }
+  .nf-view-count svg { width: 15px; height: 15px; }
   .nf-reaction.active { color: var(--gold); }
   .nf-premium-lock { display: flex; align-items: center; gap: 5px; font-size: 12px; color: var(--gold); margin-left: auto; }
   .nf-premium-lock svg { width: 13px; height: 13px; }
-  .nf-bookmark-btn { display: flex; align-items: center; justify-content: center; width: 28px; height: 28px; border-radius: 50%; color: var(--text3); margin-left: auto; }
-  .nf-bookmark-btn.active { color: var(--gold); }
-  .nf-bookmark-btn svg { width: 17px; height: 17px; }
-  .nf-reactions .nf-bookmark-btn { margin-left: auto; }
   .nf-fab { position: fixed; bottom: 24px; right: 20px; width: 52px; height: 52px; border-radius: 50%; background: var(--gold); color: var(--on-gold); display: flex; align-items: center; justify-content: center; box-shadow: var(--shadow); cursor: pointer; z-index: 50; border: none; }
   .nf-fab svg { width: 24px; height: 24px; }
 </style>
@@ -1101,8 +1104,6 @@
     <div id="fp-success-view" style="display:none;">
       <div class="fp-title">Check your email</div>
       <div class="fp-success" id="fp-success-text" style="display:block;"></div>
-      <div id="fp-countdown" class="fp-countdown" style="display:none;"></div>
-      <button class="fp-cancel-btn" id="fp-resend-btn" style="display:none;" onclick="submitForgotPassword()">Resend link</button>
       <button class="fp-close-btn" onclick="closeForgotPassword()">Close</button>
     </div>
   </div>
@@ -1217,11 +1218,7 @@
 
     <div class="topup-step-label">2. Choose amount</div>
     <div class="topup-preset-grid" id="topup-preset-grid">
-      <button type="button" class="topup-preset" data-amt="50" onclick="topupSelectPreset(50)">50<span class="credit-icon-inline">C</span></button>
-      <button type="button" class="topup-preset" data-amt="100" onclick="topupSelectPreset(100)">100<span class="credit-icon-inline">C</span></button>
-      <button type="button" class="topup-preset popular active" data-amt="200" onclick="topupSelectPreset(200)"><span class="topup-popular-badge">POPULAR</span>200<span class="credit-icon-inline">C</span></button>
-      <button type="button" class="topup-preset" data-amt="500" onclick="topupSelectPreset(500)">500<span class="credit-icon-inline">C</span></button>
-      <button type="button" class="topup-preset" data-amt="1000" onclick="topupSelectPreset(1000)">1000<span class="credit-icon-inline">C</span></button>
+      <!-- rendered by topupRenderPackages() from public.credit_packages -->
     </div>
 
     <div class="topup-or-divider"><span>OR</span></div>
@@ -1229,14 +1226,6 @@
     <div class="topup-custom-row">
       <input type="text" inputmode="numeric" id="topup-custom-input" placeholder="Enter custom amount"/>
       <div class="topup-custom-amt"><span class="credit-icon-inline">C</span> <span id="topup-custom-display">0</span></div>
-    </div>
-
-    <div class="topup-quickadd-label">Quick add</div>
-    <div class="topup-quickadd-row">
-      <button type="button" onclick="topupQuickAdd(10)">+10</button>
-      <button type="button" onclick="topupQuickAdd(20)">+20</button>
-      <button type="button" onclick="topupQuickAdd(50)">+50</button>
-      <button type="button" onclick="topupQuickAdd(100)">+100</button>
     </div>
 
     <div class="topup-step-label">3. Choose payment method</div>
@@ -2719,7 +2708,6 @@ function setAuthError(msg) {
 const RESET_PASSWORD_URL = 'https://gradevault-al3.pages.dev/reset-password.html';
 
 function openForgotPassword() {
-  stopResetCountdown();
   document.getElementById('fp-email').value = authEmail.value.trim();
   document.getElementById('fp-error').style.display = 'none';
   document.getElementById('fp-form-view').style.display = 'block';
@@ -2732,52 +2720,6 @@ function openForgotPassword() {
 
 function closeForgotPassword() {
   document.getElementById('fp-overlay').classList.remove('open');
-  stopResetCountdown();
-}
-
-// ── Reset-link countdown ─────────────────────────────────────
-// Cosmetic only. Anchored to the server's `seconds_remaining` (a relative
-// delta already computed by request_password_reset), not to `expires_at`
-// compared against the client's own clock — this avoids any dependency on
-// client/server clock skew. Hitting zero here only reveals the Resend
-// button; request_password_reset is still the one that decides whether a
-// resend actually goes through.
-let resetCountdownInterval = null;
-
-function stopResetCountdown() {
-  if (resetCountdownInterval) {
-    clearInterval(resetCountdownInterval);
-    resetCountdownInterval = null;
-  }
-}
-
-function startResetCountdown(secondsRemaining) {
-  stopResetCountdown();
-  const el = document.getElementById('fp-countdown');
-  const resendBtn = document.getElementById('fp-resend-btn');
-  let remaining = Math.max(0, Math.floor(secondsRemaining));
-
-  const render = () => {
-    if (remaining <= 0) {
-      el.textContent = 'Link expired.';
-      el.classList.add('zero');
-      resendBtn.style.display = 'block';
-      stopResetCountdown();
-      return;
-    }
-    const mins = Math.floor(remaining / 60);
-    const secs = remaining % 60;
-    el.textContent = `Link valid for ${mins}:${String(secs).padStart(2, '0')}`;
-    el.classList.remove('zero');
-    resendBtn.style.display = 'none';
-  };
-
-  el.style.display = 'block';
-  render();
-  resetCountdownInterval = setInterval(() => {
-    remaining -= 1;
-    render();
-  }, 1000);
 }
 
 async function submitForgotPassword() {
@@ -2790,10 +2732,7 @@ async function submitForgotPassword() {
     return;
   }
   const btn = document.getElementById('fp-submit-btn');
-  const resendBtn = document.getElementById('fp-resend-btn');
-  if (resendBtn.disabled) return;
   btn.disabled = true;
-  resendBtn.disabled = true;
   btn.textContent = 'Sending…';
   try {
     // Idempotency + rate limit lives server-side in request_password_reset:
@@ -2817,18 +2756,15 @@ async function submitForgotPassword() {
       const { error } = await sb.auth.resetPasswordForEmail(email, { redirectTo: RESET_PASSWORD_URL });
       if (error) throw error;
       document.getElementById('fp-success-text').textContent =
-        `If an account exists for ${email}, a password reset link is on its way. Open it on this device to set a new password.`;
+        `If an account exists for ${email}, a password reset link is on its way. It's valid for 15 minutes — open it on this device to set a new password.`;
     } else {
       // Active link still valid — suppressed the resend rather than minting a
       // duplicate. Tell the user to use the existing email; don't imply a new
       // one was sent.
+      const mins = Math.max(1, Math.ceil((rl.seconds_remaining || 0) / 60));
       document.getElementById('fp-success-text').textContent =
-
         `A reset link was already sent to ${email} and is still valid for about ${mins} minute${mins === 1 ? '' : 's'}. Check your inbox (and spam) and use that link, we didn't send a new one.`;
-
     }
-    document.getElementById('fp-resend-btn').style.display = 'none';
-    startResetCountdown(rl.seconds_remaining || 0);
     document.getElementById('fp-form-view').style.display = 'none';
     document.getElementById('fp-success-view').style.display = 'block';
   } catch (err) {
@@ -2838,7 +2774,6 @@ async function submitForgotPassword() {
     errEl.style.display = 'block';
   } finally {
     btn.disabled = false;
-    resendBtn.disabled = false;
     btn.textContent = 'Send Reset Link';
   }
 }
@@ -3137,15 +3072,33 @@ function icSendWhatsApp() {
 }
 
 // ── Top-up Credits modal (proactive, opened from the header menu) ──
-let topupAmount = 200;
+let topupAmount = 0;
+let topupPackages = [];
+let topupSelectedSlug = null;
 
-function openTopupModal() {
+async function topupLoadPackages() {
+  if (topupPackages.length) return topupPackages;
+  const { data, error } = await sb.from('credit_packages').select('*').order('sort_order');
+  if (error) { console.error(error); return []; }
+  topupPackages = data || [];
+  return topupPackages;
+}
+
+function topupFormatNaira(n) {
+  return '\u20a6' + Number(n).toLocaleString('en-NG');
+}
+
+async function openTopupModal() {
   document.getElementById('header-user-popover')?.classList.remove('open');
   document.getElementById('topup-email').value = (currentUser && currentUser.email) || '';
   document.getElementById('topup-balance-value').textContent = userCredits;
-  topupAmount = 200;
   document.getElementById('topup-custom-input').value = '';
-  topupRender();
+  await topupLoadPackages();
+  const defaultPkg = topupPackages.find(p => p.hot) || topupPackages[0];
+  topupSelectedSlug = defaultPkg ? defaultPkg.slug : null;
+  topupAmount = defaultPkg ? defaultPkg.credits : 0;
+  topupRenderPackages();
+  topupRenderCustomDisplay();
   document.getElementById('topup-overlay').classList.add('open');
 }
 
@@ -3153,33 +3106,43 @@ function closeTopupModal() {
   document.getElementById('topup-overlay').classList.remove('open');
 }
 
-function topupRender() {
-  document.querySelectorAll('#topup-preset-grid .topup-preset').forEach(btn => {
-    btn.classList.toggle('active', Number(btn.dataset.amt) === topupAmount);
-  });
+function topupRenderPackages() {
+  const grid = document.getElementById('topup-preset-grid');
+  if (!grid) return;
+  grid.innerHTML = topupPackages.map(p => `
+    <button type="button" class="topup-row ${p.slug === topupSelectedSlug ? 'active' : ''}" data-slug="${p.slug}" onclick="topupSelectPackage('${p.slug}')">
+      <span class="topup-row-radio ${p.slug === topupSelectedSlug ? 'active' : ''}"></span>
+      <span class="topup-row-label">${p.credits}<span class="credit-icon-inline">C</span></span>
+      ${p.hot ? `<span class="topup-row-badge hot">\ud83d\udd25 Hot</span>` : ''}
+      ${p.discount_label ? `<span class="topup-row-badge discount">${p.discount_label}</span>` : ''}
+      <span class="topup-row-price">
+        ${p.original_price_naira ? `<span class="topup-row-price-old">${topupFormatNaira(p.original_price_naira)}</span>` : ''}
+        <span class="topup-row-price-current">${topupFormatNaira(p.price_naira)}</span>
+      </span>
+    </button>
+  `).join('');
+}
+
+function topupRenderCustomDisplay() {
   document.getElementById('topup-custom-display').textContent = topupAmount;
 }
 
-function topupSelectPreset(amt) {
-  topupAmount = amt;
+function topupSelectPackage(slug) {
+  topupSelectedSlug = slug;
+  const pkg = topupPackages.find(p => p.slug === slug);
+  topupAmount = pkg ? pkg.credits : 0;
   document.getElementById('topup-custom-input').value = '';
-  topupRender();
-}
-
-function topupQuickAdd(delta) {
-  const input = document.getElementById('topup-custom-input');
-  const current = parseInt(input.value, 10) || 0;
-  const next = current + delta;
-  input.value = String(next);
-  topupAmount = next;
-  topupRender();
+  topupRenderPackages();
+  topupRenderCustomDisplay();
 }
 
 document.getElementById('topup-custom-input')?.addEventListener('input', (e) => {
   const digits = e.target.value.replace(/[^0-9]/g, '');
   e.target.value = digits;
+  topupSelectedSlug = null; // typing a custom amount deselects any preset row
   topupAmount = digits ? parseInt(digits, 10) : 0;
-  topupRender();
+  topupRenderPackages();
+  topupRenderCustomDisplay();
 });
 
 function topupSendWhatsApp() {
@@ -3187,7 +3150,9 @@ function topupSendWhatsApp() {
   const shortId = icUserShortId();
   const amt = topupAmount || 0;
   if (amt <= 0) { showToast('Choose an amount to top up', true); return; }
-  const text = `Hi GradeVault support, I'd like to top up ${amt} credits. `
+  const pkg = topupSelectedSlug ? topupPackages.find(p => p.slug === topupSelectedSlug) : null;
+  const priceText = pkg ? ` (${topupFormatNaira(pkg.price_naira)})` : '';
+  const text = `Hi GradeVault support, I'd like to top up ${amt} credits${priceText}. `
     + `My user ID is ${shortId} (${email}).`;
   const url = `https://wa.me/${IC_WHATSAPP_NUMBER}?text=${encodeURIComponent(text)}`;
   window.open(url, '_blank', 'noopener');
@@ -3799,6 +3764,15 @@ function timeAgo(iso) {
   return new Date(iso).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
 }
 
+function formatViewCount(n) {
+  n = n || 0;
+  if (n < 1000) return String(n);
+  const k = n / 1000;
+  // one decimal, but drop a trailing .0 (1000 -> "1k", 1250 -> "1.3k")
+  const rounded = Math.round(k * 10) / 10;
+  return (Number.isInteger(rounded) ? rounded.toFixed(0) : rounded.toFixed(1)) + 'k';
+}
+
 function tagClass(tag) {
   return 'nf-tag nf-tag-' + tag.toLowerCase();
 }
@@ -3936,8 +3910,9 @@ function renderPostCard(p) {
             ${p.commentCount}
           </span>
           ${lockHtml}
-          <span class="nf-bookmark-btn ${p.bookmarked ? 'active' : ''}" onclick="event.stopPropagation(); toggleBookmark('${p.id}', this);">
-            <svg viewBox="0 0 24 24" fill="${p.bookmarked ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="1.75"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+          <span class="nf-view-count">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+            ${formatViewCount(p.view_count)}
           </span>
         </div>
       </div>`;
@@ -3971,6 +3946,31 @@ function openPost(postId) {
   renderPostDetail(post);
   syncPostMenu();
   loadComments(postId);
+  registerPostView(postId);
+}
+
+// One increment per post per browser session — avoids inflating the count
+// just from someone reopening the same post repeatedly in one sitting.
+const VIEWED_POSTS_KEY = 'gv_viewed_posts';
+
+function registerPostView(postId) {
+  let viewed;
+  try {
+    viewed = new Set(JSON.parse(sessionStorage.getItem(VIEWED_POSTS_KEY) || '[]'));
+  } catch {
+    viewed = new Set();
+  }
+  if (viewed.has(postId)) return;
+  viewed.add(postId);
+  try {
+    sessionStorage.setItem(VIEWED_POSTS_KEY, JSON.stringify([...viewed]));
+  } catch {}
+
+  sb.rpc('increment_post_view', { p_post_id: postId }).then(({ data, error }) => {
+    if (error) { console.error('increment_post_view failed', error); return; }
+    const cached = postsCache.find(p => p.id === postId);
+    if (cached) cached.view_count = data;
+  });
 }
 
 function closePost() {
