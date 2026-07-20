@@ -3089,15 +3089,19 @@ function isNativeApp() {
 
 function maybeShowApkPromo() {
   if (isNativeApp()) return;
-  let lastDismissed = 0;
-  try { lastDismissed = parseInt(localStorage.getItem('gv_apk_promo_dismissed_at') || '0', 10); } catch (_) {}
-  if (Date.now() - lastDismissed < 24 * 60 * 60 * 1000) return;
+
+  let count = 0;
+  try { count = parseInt(localStorage.getItem('gv_apk_promo_shown_count') || '0', 10) || 0; } catch (_) {}
+
+  if (count >= 5) return; // already shown 5 times total, ever
+
+  try { localStorage.setItem('gv_apk_promo_shown_count', String(count + 1)); } catch (_) {}
+
   const el = document.getElementById('apk-promo-overlay');
   if (el) el.classList.add('open');
 }
 
 function closeApkPromo() {
-  try { localStorage.setItem('gv_apk_promo_dismissed_at', String(Date.now())); } catch (_) {}
   const el = document.getElementById('apk-promo-overlay');
   if (el) el.classList.remove('open');
 }
