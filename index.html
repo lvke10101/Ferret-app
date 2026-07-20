@@ -23,6 +23,7 @@
     --bg: #0e0f14; --surface:#16181f; --card:#1c1f2a; --border:#2a2d3a; --border2:#353848;
     --gold:#d4a843; --gold2:#f0c96a; --green:#2d7a4f; --green2:#3da86c; --red:#c0392b; --red2:#e74c3c;
     --blue:#2980b9; --text:#e8eaf0; --text2:#9da0b0; --text3:#6b6f80;
+    --purple:#9b6bd6; --purple2:#7a4bc9;
     --A:#3da86c; --B:#2980b9; --C:#d4a843; --D:#c0784a; --E:#c0392b; --F:#6b2d2d;
     --shadow:0 4px 24px rgba(0,0,0,0.4); --radius:14px;
     --overlay-soft:rgba(255,255,255,0.02); --overlay-soft2:rgba(255,255,255,0.04);
@@ -33,6 +34,7 @@
     --bg:#f5f3ee; --surface:#ffffff; --card:#faf8f3; --border:#e3ddd0; --border2:#d4cbb8;
     --gold:#d4a843; --gold2:#b8893a; --green:#2d7a4f; --green2:#2f8c5c; --red:#c0392b; --red2:#b8362a;
     --blue:#2980b9; --text:#1f2126; --text2:#3d4047; --text3:#666970;
+    --purple:#8355c7; --purple2:#6b3fb0;
     --A:#2f8c5c; --B:#2980b9; --C:#b8893a; --D:#a8623a; --E:#c0392b; --F:#6b2d2d;
     --shadow:0 4px 24px rgba(31,33,38,0.08); --radius:14px;
     --overlay-soft:rgba(0,0,0,0.025); --overlay-soft2:rgba(0,0,0,0.05);
@@ -244,6 +246,61 @@
   .ch-item-balance { font-size:11.5px; color:var(--gold); margin-top:2px; }
   .ch-empty { padding:32px 16px; text-align:center; color:var(--text3); font-size:14px; }
   .ch-load-more-btn { width:100%; padding:12px; margin-bottom:22px; border:1px solid var(--border2); border-radius:12px; background:var(--surface); color:var(--gold); font-weight:600; font-size:14px; cursor:pointer; }
+
+  /* Leaderboard (replaced with new design) */
+  #leaderboard-screen { display:none; min-height:100vh; min-height:100dvh; flex-direction:column; background:var(--bg); }
+  #leaderboard-screen * { box-sizing:border-box; }
+  #leaderboard-screen { font-family:'Inter', -apple-system, BlinkMacSystemFont, sans-serif; color:var(--text); padding-bottom:40px; }
+  #leaderboard-screen .header { padding:20px 20px 16px; }
+  #leaderboard-screen .back-btn { display:inline-flex; align-items:center; margin-bottom:8px; cursor:pointer; -webkit-tap-highlight-color:transparent; }
+  #leaderboard-screen .back-arrow { width:28px; height:28px; stroke:var(--text); stroke-width:2.5; fill:none; stroke-linecap:round; stroke-linejoin:round; }
+  #leaderboard-screen .header h1 { font-size:28px; font-weight:700; margin-bottom:4px; letter-spacing:-0.5px; }
+  #leaderboard-screen .header p { font-size:14px; color:var(--text2); font-weight:400; }
+  #leaderboard-screen .tabs-container { padding:0 16px; margin-bottom:16px; overflow-x:auto; -webkit-overflow-scrolling:touch; scrollbar-width:none; }
+  #leaderboard-screen .tabs-container::-webkit-scrollbar { display:none; }
+  #leaderboard-screen .tabs { display:flex; background:var(--card); border:1px solid var(--border); border-radius:14px; padding:4px; gap:4px; width:max-content; min-width:100%; }
+  #leaderboard-screen .tab { flex:1; display:flex; align-items:center; justify-content:center; gap:6px; padding:10px 8px; border-radius:12px; font-size:13px; font-weight:600; color:var(--text2); cursor:pointer; transition:all 0.2s; position:relative; white-space:nowrap; flex-shrink:0; -webkit-tap-highlight-color:transparent; }
+  #leaderboard-screen .tab.active { background:var(--gold); color:var(--on-gold); }
+  #leaderboard-screen .tab-icon { width:18px; height:18px; flex-shrink:0; }
+  #leaderboard-screen .soon-badge { font-size:9px; font-weight:700; background:linear-gradient(135deg, var(--purple2), var(--purple)); color:#ffffff; padding:2px 6px; border-radius:4px; margin-left:2px; }
+  #leaderboard-screen .tab-divider { width:1px; height:20px; background:var(--border); align-self:center; flex-shrink:0; }
+  #leaderboard-screen .info-bar { display:flex; justify-content:space-between; align-items:center; padding:0 20px; margin-bottom:12px; gap:12px; }
+  #leaderboard-screen .info-text { font-size:13px; color:var(--text2); }
+  #leaderboard-screen .update-timer { display:flex; align-items:center; gap:6px; font-size:13px; color:var(--text2); flex-shrink:0; }
+  #leaderboard-screen .refresh-icon { width:16px; height:16px; stroke:var(--text2); stroke-width:2; fill:none; }
+  #leaderboard-screen .leaderboard-list { padding:0 16px; display:flex; flex-direction:column; gap:8px; }
+  #leaderboard-screen .leader-item { display:flex; align-items:center; padding:12px 14px; background:var(--card); border-radius:16px; border:1px solid var(--border); transition:transform 0.15s; }
+  #leaderboard-screen .leader-item:first-child { background:var(--card); border:1.5px solid var(--gold); box-shadow:0 0 20px rgba(212,168,67,0.15); }
+  #leaderboard-screen .rank { width:32px; font-size:18px; font-weight:700; text-align:center; flex-shrink:0; }
+  #leaderboard-screen .rank.gold { color:var(--gold); }
+  #leaderboard-screen .rank.silver { color:var(--text2); }
+  #leaderboard-screen .rank.bronze { color:var(--D); }
+  #leaderboard-screen .rank.normal { color:var(--text3); }
+  #leaderboard-screen .avatar { width:44px; height:44px; border-radius:50%; margin:0 12px; flex-shrink:0; border:2px solid var(--border); background:var(--surface); display:flex; align-items:center; justify-content:center; font-size:16px; font-weight:700; color:var(--text); overflow:hidden; }
+  #leaderboard-screen .avatar img { width:100%; height:100%; object-fit:cover; }
+  #leaderboard-screen .leader-item:first-child .avatar { border-color:var(--gold); }
+  #leaderboard-screen .leader-info { flex:1; min-width:0; }
+  #leaderboard-screen .leader-name { font-size:15px; font-weight:600; color:var(--text); display:flex; align-items:center; gap:6px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  #leaderboard-screen .crown { font-size:14px; flex-shrink:0; }
+  #leaderboard-screen .leader-score { display:flex; align-items:center; gap:6px; font-size:15px; font-weight:700; color:var(--gold); flex-shrink:0; }
+  #leaderboard-screen .credit-icon { width:20px; height:20px; background:var(--gold); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:800; color:var(--on-gold); flex-shrink:0; }
+  #leaderboard-screen .your-position { margin:20px 16px 0; background:var(--card); border-radius:16px; border:1px solid var(--border); padding:16px; }
+  #leaderboard-screen .your-header { display:flex; align-items:center; gap:8px; margin-bottom:12px; }
+  #leaderboard-screen .user-icon { width:18px; height:18px; stroke:var(--gold); stroke-width:2; fill:none; }
+  #leaderboard-screen .your-label { font-size:14px; font-weight:600; color:var(--gold); }
+  #leaderboard-screen .your-rank-row { display:flex; align-items:center; margin-bottom:10px; }
+  #leaderboard-screen .your-rank-num { font-size:28px; font-weight:800; color:var(--gold); margin-right:12px; line-height:1; flex-shrink:0; }
+  #leaderboard-screen .your-name { flex:1; font-size:15px; font-weight:600; min-width:0; }
+  #leaderboard-screen .your-score { display:flex; align-items:center; gap:6px; font-size:15px; font-weight:700; color:var(--gold); flex-shrink:0; }
+  #leaderboard-screen .progress-info { display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; gap:8px; }
+  #leaderboard-screen .progress-left, #leaderboard-screen .progress-right { display:flex; align-items:center; gap:4px; font-size:12px; color:var(--text2); white-space:nowrap; }
+  #leaderboard-screen .arrow-up-icon { width:14px; height:14px; stroke:var(--green2); stroke-width:2.5; fill:none; flex-shrink:0; }
+  #leaderboard-screen .arrow-down-icon { width:14px; height:14px; stroke:var(--red2); stroke-width:2.5; fill:none; flex-shrink:0; }
+  #leaderboard-screen .progress-bar { width:100%; height:6px; background:var(--overlay-soft2); border-radius:3px; overflow:hidden; }
+  #leaderboard-screen .progress-fill { height:100%; background:linear-gradient(90deg, var(--green), var(--green2)); border-radius:3px; transition:width 0.3s; }
+  #leaderboard-screen .footer-text { text-align:center; margin-top:20px; font-size:13px; color:var(--text3); padding:0 20px; }
+  #leaderboard-screen .lb-empty { text-align:center; padding:32px 20px; color:var(--text3); font-size:13px; }
+  [data-theme="light"] #leaderboard-screen .leader-item:first-child { box-shadow:0 2px 14px rgba(184,137,58,0.14); }
   #app { display:none; min-height:100vh; min-height:100dvh; flex-direction:column; }
   header { background:var(--surface); border-bottom:1px solid var(--border); padding:0 16px; padding-top:env(safe-area-inset-top); padding-left:calc(16px + env(safe-area-inset-left)); padding-right:calc(16px + env(safe-area-inset-right)); display:flex; align-items:center; gap:12px; min-height:54px; flex-shrink:0; position:sticky; top:0; z-index:100; }
   .header-logo { font-family:'Playfair Display',serif; font-size:18px; color:var(--gold); letter-spacing:-0.2px; }
@@ -263,15 +320,16 @@
   .header-balance .balance-amt { font-weight:600; color:var(--gold); }
   .header-balance.low .credit-icon-inline { background:var(--red2); }
   .header-balance.low .balance-amt { color:var(--red2); }
-  .header-user-popover { position:absolute; top:calc(100% + 8px); right:0; min-width:188px; background:var(--card); border:1px solid var(--border2); border-radius:12px; box-shadow:var(--shadow); z-index:150; display:none; overflow:hidden; }
+  .header-user-popover { position:absolute; top:calc(100% + 8px); right:0; width:210px; max-height:240px; overflow-y:auto; background:var(--card); border:1px solid var(--border2); border-radius:12px; box-shadow:var(--shadow); z-index:150; display:none; }
   .header-user-popover.open { display:block; }
   .hu-pop-item { display:flex; align-items:center; gap:10px; padding:12px 14px; font-size:13.5px; color:var(--text); cursor:pointer; transition:background 0.15s; border-bottom:1px solid var(--border); -webkit-tap-highlight-color:transparent; }
   .hu-pop-item:active:not(.static) { background:var(--overlay-soft2); }
   .hu-pop-item:last-child { border-bottom:none; cursor:default; }
+  .hu-pop-item:first-child { border-top-left-radius:12px; border-top-right-radius:12px; }
+  .hu-pop-item:last-child { border-bottom-left-radius:12px; border-bottom-right-radius:12px; }
   .hu-pop-item:hover:not(.static) { background:var(--overlay-soft2); }
   .hu-pop-item svg { width:16px; height:16px; flex-shrink:0; color:var(--text3); }
   .hu-pop-balance-amt { margin-left:auto; font-family:'DM Mono',monospace; color:var(--gold); font-weight:600; }
-  .header-user-popover { min-width:240px; }
   .hu-pop-topup { align-items:flex-start; background:linear-gradient(90deg, rgba(224,166,38,0.16), rgba(224,166,38,0.03)); }
   .hu-pop-topup:hover, .hu-pop-topup:active { background:linear-gradient(90deg, rgba(224,166,38,0.24), rgba(224,166,38,0.06)) !important; }
   .hu-pop-topup svg:first-child { color:var(--gold); margin-top:1px; }
@@ -538,7 +596,7 @@
   /* ── GradeVault generic centered modal (review / calculating / result) ── */
   .gv-modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.6); z-index:220; align-items:center; justify-content:center; padding:20px; }
   .gv-modal-overlay.open { display:flex; }
-  .gv-modal-card { position:relative; width:100%; max-width:300px; background:var(--surface); border:1px solid var(--border); border-radius:22px; padding:34px 26px 28px; text-align:center; box-shadow:var(--shadow); }
+  .gv-modal-card { position:relative; width:100%; max-width:400px; background:var(--surface); border:1px solid var(--border); border-radius:22px; padding:34px 26px 28px; text-align:center; box-shadow:var(--shadow); }
   .gv-modal-close { position:absolute; top:16px; right:16px; width:32px; height:32px; border-radius:50%; border:none; background:var(--card); color:var(--text3); display:flex; align-items:center; justify-content:center; cursor:pointer; -webkit-tap-highlight-color:transparent; }
   .gv-modal-close svg { width:15px; height:15px; }
   .gv-modal-pen { position:absolute; top:16px; right:16px; width:34px; height:34px; border-radius:50%; border:1.5px solid var(--gold); background:none; color:var(--gold); display:flex; align-items:center; justify-content:center; cursor:pointer; -webkit-tap-highlight-color:transparent; transition:all 0.15s; }
@@ -1307,6 +1365,13 @@
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7"/></svg>
             <span>Profile</span>
           </div>
+          <div class="hu-pop-item hu-pop-topup" onclick="event.stopPropagation(); showLeaderboard();">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4h10v5a5 5 0 0 1-10 0V4Z"/><path d="M7 5H4a1 1 0 0 0-1 1v1a4 4 0 0 0 4 4"/><path d="M17 5h3a1 1 0 0 1 1 1v1a4 4 0 0 1-4 4"/><path d="M12 17v4"/><path d="M8 21h8"/></svg>
+            <div class="hu-pop-topup-text">
+              <span>Leaderboard</span>
+              <span class="hu-pop-topup-sub">See who's on top</span>
+            </div>
+          </div>
           <div class="hu-pop-item" onclick="event.stopPropagation(); showBookmarks();">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
             <span>Bookmarks</span>
@@ -1924,6 +1989,96 @@
     </div>
     <button id="ch-load-more" class="ch-load-more-btn" style="display:none" onclick="loadCreditHistory(false)">Load more</button>
   </div>
+</div>
+
+<!-- ══ LEADERBOARD SCREEN (v2 design — static/dead for now, no live data wiring yet) ═══ -->
+<div id="leaderboard-screen">
+    <!-- Header -->
+    <div class="header">
+        <div class="back-btn" onclick="hideLeaderboard()">
+            <svg class="back-arrow" viewBox="0 0 24 24">
+                <path d="M19 12H5M12 19l-7-7 7-7"/>
+            </svg>
+        </div>
+        <h1>Leaderboard</h1>
+        <p>See who's leading the community!</p>
+    </div>
+
+    <!-- Tabs -->
+    <div class="tabs-container">
+        <div class="tabs">
+            <div class="tab active" id="lb-tab-balance" onclick="setLeaderboardTab('balance', this)">
+                <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/>
+                    <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/>
+                    <path d="M4 22h16"/>
+                    <path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/>
+                    <path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/>
+                    <path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/>
+                </svg>
+                Most Credits
+            </div>
+            <div class="tab-divider"></div>
+            <div class="tab" id="lb-tab-spent" onclick="setLeaderboardTab('spent', this)">
+                <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="12" y1="1" x2="12" y2="23"/>
+                    <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+                </svg>
+                Top Spenders
+            </div>
+            <div class="tab-divider"></div>
+            <div class="tab" onclick="showToast('Streak Masters — coming soon.')">
+                <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/>
+                </svg>
+                Streak Masters
+                <span class="soon-badge">Soon</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Info Bar -->
+    <div class="info-bar">
+        <span class="info-text" id="lb-info-text">Ranked by the total number of credits earned.</span>
+        <div class="update-timer">
+            <svg class="refresh-icon" viewBox="0 0 24 24">
+                <path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.3"/>
+            </svg>
+            Updates in <span id="lb-countdown">10m 0s</span>
+        </div>
+    </div>
+
+    <!-- Leaderboard List -->
+    <div class="leaderboard-list" id="lb-list"></div>
+
+    <!-- Your Position -->
+    <div class="your-position" id="lb-your-position">
+        <div class="your-header">
+            <svg class="user-icon" viewBox="0 0 24 24">
+                <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/>
+                <circle cx="12" cy="7" r="4"/>
+            </svg>
+            <span class="your-label">Your Position</span>
+        </div>
+        <div class="your-rank-row">
+            <span class="your-rank-num" id="lb-yp-rank">#—</span>
+            <div class="avatar" id="lb-yp-avatar"></div>
+            <span class="your-name">You</span>
+            <div class="your-score">
+                <div class="credit-icon">C</div>
+                <span id="lb-yp-value">—</span>
+            </div>
+        </div>
+        <div class="progress-info" id="lb-yp-deltas"></div>
+        <div class="progress-bar">
+            <div class="progress-fill" id="lb-yp-progress-fill" style="width:0%"></div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer-text">
+        Keep participating and climb higher on the leaderboard!
+    </div>
 </div>
 
 <!-- ══ FAQ SCREEN ═══════════════════════════════════════════ -->
@@ -3464,9 +3619,7 @@ async function loadNotifications() {
     let actorMap = {};
     if (actorIds.length) {
       const { data: profiles } = await sb
-        .from('gpa_data')
-        .select('id, username, full_name')
-        .in('id', actorIds);
+        .rpc('get_public_profiles', { p_ids: actorIds });
       (profiles || []).forEach(p => { actorMap[p.id] = p; });
     }
 
@@ -3884,7 +4037,7 @@ async function loadPosts() {
 
     const [{ data: reactions }, { data: authors }, { data: myUnlocks }, { data: myBookmarks }, { data: commentRows }] = await Promise.all([
       sb.from('reactions').select('post_id, type, user_id').in('post_id', postIds),
-      sb.from('gpa_data').select('id, username, full_name, avatar_id, verified').in('id', authorIds),
+      sb.rpc('get_public_profiles', { p_ids: authorIds }),
       currentUser
         ? sb.from('post_unlocks').select('post_id').eq('user_id', currentUser.id).in('post_id', postIds)
         : Promise.resolve({ data: [] }),
@@ -4084,7 +4237,7 @@ async function openPostById(postId) {
     }
 
     const [{ data: authorRow }, { data: reactions }, { data: myUnlock }, { data: myBookmark }, { data: commentRows }] = await Promise.all([
-      sb.from('gpa_data').select('id, username, full_name, avatar_id, verified').eq('id', p.author_id).maybeSingle(),
+      sb.rpc('get_public_profiles', { p_ids: [p.author_id] }).then(({ data, error }) => ({ data: (data && data[0]) || null, error })),
       sb.from('reactions').select('type, user_id').eq('post_id', postId),
       currentUser
         ? sb.from('post_unlocks').select('post_id').eq('user_id', currentUser.id).eq('post_id', postId).maybeSingle()
@@ -4537,9 +4690,7 @@ const authorIds = [...new Set((rows || []).map(c => c.author_id))];
 let profileMap = {};
 if (authorIds.length) {
   const { data: profiles } = await sb
-    .from('gpa_data')
-    .select('id, username, full_name, avatar_id, role, verified')
-    .in('id', authorIds);
+    .rpc('get_public_profiles', { p_ids: authorIds });
   (profiles || []).forEach(pr => { profileMap[pr.id] = pr; });
 }
 
@@ -4653,8 +4804,10 @@ function renderComments(postId, rows, restricted, canComment) {
     const hiddenReplyCount = allChildren.length - visibleChildren.length;
     const childrenHtml = visibleChildren.map(r => commentHtml(r, true)).join('');
     const showMoreRepliesHtml = hiddenReplyCount > 0
-      ? `<button class="pd-show-more-replies" onclick="expandReplyThread('${c.id}', '${postId}')">Show ${hiddenReplyCount} more repl${hiddenReplyCount === 1 ? 'y' : 'ies'} ↓</button>`
-      : '';
+      ? `<button class="pd-show-more-replies" onclick="toggleReplyThread('${c.id}', '${postId}')">Show ${hiddenReplyCount} more repl${hiddenReplyCount === 1 ? 'y' : 'ies'} ↓</button>`
+      : (isExpanded && allChildren.length > REPLY_COLLAPSE_THRESHOLD
+          ? `<button class="pd-show-more-replies" onclick="toggleReplyThread('${c.id}', '${postId}')">Hide replies ↑</button>`
+          : '');
 
     // Client-side hint only — the real 5-minute gate is enforced server-side
     // in edit_comment(). This just decides whether to show the option at all.
@@ -4861,8 +5014,9 @@ function showMoreComments(postId) {
   if (scroller) scroller.scrollTop = prevScrollTop;
 }
 
-function expandReplyThread(commentId, postId) {
-  threadExpanded.add(commentId);
+function toggleReplyThread(commentId, postId) {
+  if (threadExpanded.has(commentId)) threadExpanded.delete(commentId);
+  else threadExpanded.add(commentId);
   const state = commentRenderState[postId];
   if (!state) return;
   const scroller = document.getElementById('pd-comments-wrap');
@@ -5017,6 +5171,208 @@ function showBookmarks() {
 function hideBookmarks() {
   popBackHandler(hideBookmarks);
   document.getElementById('bookmarks-screen').style.display = 'none';
+  app.style.display = 'flex';
+}
+
+// ── Leaderboard screen ───────────────────────────────────────
+// Live-wired: get_leaderboard / get_my_leaderboard_rank RPCs (schema37.sql).
+// 'balance' = Most Credits (current balance, drops on spend).
+// 'spent'   = Top Spenders (lifetime total spent). Both live.
+// 'streak' is intentionally not wired — no streak concept in the schema yet.
+let lbCurrentMetric = 'balance';
+let lbRefreshTimer = null;
+let lbCountdownTimer = null;
+const LB_REFRESH_MS = 10 * 60 * 1000;
+
+async function ensureAvatarsCache() {
+  if (!avatarsCache) {
+    const { data } = await sb.from('avatars').select('id,url').order('created_at');
+    avatarsCache = data || [];
+  }
+}
+function lbResolveAvatarUrl(avatarId) {
+  if (!avatarId || !avatarsCache) return null;
+  const match = avatarsCache.find(a => a.id === avatarId);
+  return match ? match.url : null;
+}
+function lbRankClass(rank) {
+  if (rank === 1) return 'gold';
+  if (rank === 2) return 'silver';
+  if (rank === 3) return 'bronze';
+  return 'normal';
+}
+function lbFormatNum(n) {
+  return Number(n || 0).toLocaleString();
+}
+
+async function setLeaderboardTab(metric, btnEl) {
+  if (metric === lbCurrentMetric) return;
+  lbCurrentMetric = metric;
+  document.querySelectorAll('#leaderboard-screen .tab').forEach(t => t.classList.remove('active'));
+  if (btnEl) btnEl.classList.add('active');
+  document.getElementById('lb-info-text').textContent = metric === 'spent'
+    ? 'Ranked by the total number of credits spent.'
+    : 'Ranked by the total number of credits earned.';
+  await loadLeaderboardData();
+}
+
+async function loadLeaderboardData() {
+  const listEl = document.getElementById('lb-list');
+  listEl.innerHTML = '<div class="lb-empty">Loading…</div>';
+  const metric = lbCurrentMetric;
+  try {
+    await ensureAvatarsCache();
+
+    const [{ data: rows, error: rowsErr }, myRankResult] = await Promise.all([
+      sb.rpc('get_leaderboard', { p_metric: metric, p_limit: 10 }),
+      currentUser
+        ? sb.rpc('get_my_leaderboard_rank', { p_metric: metric })
+        : Promise.resolve({ data: null, error: null })
+    ]);
+    if (rowsErr) throw rowsErr;
+    // Stale-tab guard: if the user switched tabs again while this was in
+    // flight, drop the result instead of rendering it into the wrong tab.
+    if (metric !== lbCurrentMetric) return;
+
+    const userIds = (rows || []).map(r => r.user_id);
+    let profileMap = {};
+    if (userIds.length) {
+      const { data: profiles } = await sb.rpc('get_public_profiles', { p_ids: userIds });
+      (profiles || []).forEach(p => { profileMap[p.id] = p; });
+    }
+
+    if (!rows || rows.length === 0) {
+      listEl.innerHTML = '<div class="lb-empty">No rankings yet.</div>';
+    } else {
+      listEl.innerHTML = rows.map(r => {
+        const p = profileMap[r.user_id] || {};
+        const name = p.username || p.full_name || 'Anonymous';
+        const avatarUrl = lbResolveAvatarUrl(p.avatar_id);
+        const initial = name.charAt(0).toUpperCase();
+        const avatarInner = avatarUrl ? `<img src="${esc(avatarUrl)}" alt=""/>` : initial;
+        const crown = r.rank === 1 ? ' <span class="crown">👑</span>' : '';
+        return `
+          <div class="leader-item">
+            <span class="rank ${lbRankClass(Number(r.rank))}">${r.rank}</span>
+            <div class="avatar">${avatarInner}</div>
+            <div class="leader-info">
+              <div class="leader-name">${esc(name)}${crown}</div>
+            </div>
+            <div class="leader-score">
+              <div class="credit-icon">C</div>
+              ${lbFormatNum(r.value)}
+            </div>
+          </div>`;
+      }).join('');
+    }
+
+    renderLeaderboardYourPosition(myRankResult && myRankResult.data ? myRankResult.data[0] : null, myRankResult && myRankResult.error);
+  } catch (err) {
+    listEl.innerHTML = '<div class="lb-empty">Couldn\'t load the leaderboard.</div>';
+    showToast(isNetworkError(err) ? 'Network unavailable. Leaderboard could not load.' : 'Error loading leaderboard: ' + err.message, true);
+  }
+}
+
+function renderLeaderboardYourPosition(me, err) {
+  const rankEl = document.getElementById('lb-yp-rank');
+  const avatarEl = document.getElementById('lb-yp-avatar');
+  const valueEl = document.getElementById('lb-yp-value');
+  const deltasEl = document.getElementById('lb-yp-deltas');
+  const fillEl = document.getElementById('lb-yp-progress-fill');
+  const posCard = document.getElementById('lb-your-position');
+
+  if (!currentUser) { posCard.style.display = 'none'; return; }
+  posCard.style.display = 'block';
+
+  setAvatarEl(avatarEl, userData && userData.avatarUrl, ((userData && userData.username) || 'Y').charAt(0).toUpperCase());
+
+  if (err || !me || me.rank == null) {
+    // Not an error state worth a toast — most commonly this just means
+    // "you haven't spent anything yet" on the Top Spenders tab.
+    rankEl.textContent = '—';
+    valueEl.textContent = lbCurrentMetric === 'spent' ? '0' : lbFormatNum(typeof userCredits === 'number' ? userCredits : 0);
+    deltasEl.innerHTML = `<div class="progress-left">${lbCurrentMetric === 'spent' ? "You haven't spent any credits yet." : 'Not ranked yet.'}</div>`;
+    fillEl.style.width = '0%';
+    return;
+  }
+
+  rankEl.textContent = '#' + lbFormatNum(me.rank);
+  valueEl.textContent = lbFormatNum(me.value);
+
+  const aboveGap = me.above_value != null ? (me.above_value - me.value) : null;
+  const belowGap = me.below_value != null ? (me.value - me.below_value) : null;
+
+  let deltasHtml = '';
+  if (aboveGap != null) {
+    deltasHtml += `
+      <div class="progress-left">
+        <svg class="arrow-up-icon" viewBox="0 0 24 24"><path d="M12 19V5M5 12l7-7 7-7"/></svg>
+        ${lbFormatNum(aboveGap)} credits to #${lbFormatNum(me.rank - 1)}
+      </div>`;
+  } else {
+    deltasHtml += `<div class="progress-left">You're #1 on this board.</div>`;
+  }
+  if (belowGap != null) {
+    deltasHtml += `
+      <div class="progress-right">
+        ${lbFormatNum(belowGap)} credits ahead of #${lbFormatNum(Number(me.rank) + 1)}
+        <svg class="arrow-down-icon" viewBox="0 0 24 24"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+      </div>`;
+  }
+  deltasEl.innerHTML = deltasHtml;
+
+  // Progress = how far between the rank below and the rank above you sit,
+  // i.e. how close you are to overtaking #(rank-1).
+  if (aboveGap != null && belowGap != null && (aboveGap + belowGap) > 0) {
+    fillEl.style.width = Math.round((belowGap / (aboveGap + belowGap)) * 100) + '%';
+  } else if (aboveGap == null) {
+    fillEl.style.width = '100%'; // already #1
+  } else {
+    fillEl.style.width = '0%';
+  }
+}
+
+function lbFormatCountdown(ms) {
+  const totalSecs = Math.max(0, Math.floor(ms / 1000));
+  const m = Math.floor(totalSecs / 60), s = totalSecs % 60;
+  return `${m}m ${s}s`;
+}
+function lbStartRefreshCycle() {
+  lbStopRefreshCycle();
+  let nextRefreshAt = Date.now() + LB_REFRESH_MS;
+  const countdownEl = document.getElementById('lb-countdown');
+  if (countdownEl) countdownEl.textContent = lbFormatCountdown(nextRefreshAt - Date.now());
+  lbCountdownTimer = setInterval(() => {
+    const el = document.getElementById('lb-countdown');
+    if (el) el.textContent = lbFormatCountdown(nextRefreshAt - Date.now());
+  }, 1000);
+  lbRefreshTimer = setInterval(() => {
+    nextRefreshAt = Date.now() + LB_REFRESH_MS;
+    loadLeaderboardData();
+  }, LB_REFRESH_MS);
+}
+function lbStopRefreshCycle() {
+  if (lbRefreshTimer) { clearInterval(lbRefreshTimer); lbRefreshTimer = null; }
+  if (lbCountdownTimer) { clearInterval(lbCountdownTimer); lbCountdownTimer = null; }
+}
+
+function showLeaderboard() {
+  document.getElementById('header-user-popover')?.classList.remove('open');
+  document.getElementById('header-user')?.classList.remove('open');
+  app.style.display = 'none';
+  document.getElementById('leaderboard-screen').style.display = 'flex';
+  lbCurrentMetric = 'balance';
+  document.querySelectorAll('#leaderboard-screen .tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('lb-tab-balance').classList.add('active');
+  document.getElementById('lb-info-text').textContent = 'Ranked by the total number of credits earned.';
+  loadLeaderboardData();
+  lbStartRefreshCycle();
+  pushBackHandler(hideLeaderboard);
+}
+function hideLeaderboard() {
+  popBackHandler(hideLeaderboard);
+  lbStopRefreshCycle();
+  document.getElementById('leaderboard-screen').style.display = 'none';
   app.style.display = 'flex';
 }
 
@@ -5938,11 +6294,34 @@ async function openCatalogPicker() {
 
 function populateCatalogSemesters() {
   const year = parseInt(document.getElementById('catalog-year-select').value, 10);
-  const sems = catalogRows.filter(r => r.year === year).map(r => r.semester);
+  // The only semester it's ever valid to import here is the one the
+  // student currently has open (catalogPickDefaultSem). Previously this
+  // built a dropdown from whichever semesters happened to have a catalog
+  // row and silently defaulted to one of them even if it didn't match the
+  // open tab — e.g. Year 1 Sem 1 open, only a Sem 2 catalog exists, and it
+  // would offer to import Sem 2's courses into Sem 1's slot while still
+  // labeling it "Year 1 · Semester 1". Lock to the matching row only.
+  const row = catalogRows.find(r => r.year === year && r.semester === catalogPickDefaultSem);
+
+  const semField = document.getElementById('catalog-sem-field');
+  const fallbackNote = document.getElementById('catalog-year-fallback-note');
+  const fallbackText = fallbackNote.querySelector('span');
+
+  if (!row) {
+    semField.style.display = 'none';
+    fallbackNote.style.display = 'block';
+    fallbackText.textContent = `Catalog for your year (${year}) · ${catalogPickDefaultSem} Semester isn't available yet. Check back later.`;
+    document.getElementById('catalog-import-btn').disabled = true;
+    document.getElementById('catalog-picker-info').style.display = 'none';
+    return;
+  }
+
+  semField.style.display = 'block';
   const semSelect = document.getElementById('catalog-sem-select');
-  semSelect.innerHTML = sems.map(s => `<option value="${s}">${s} Semester</option>`).join('');
-  semSelect.value = sems.includes(catalogPickDefaultSem) ? catalogPickDefaultSem : sems[0];
-  semSelect.onchange = updateCatalogPreview;
+  semSelect.innerHTML = `<option value="${row.semester}">${row.semester} Semester</option>`;
+  semSelect.value = row.semester;
+  semSelect.disabled = true;
+  fallbackNote.style.display = 'none';
   updateCatalogPreview();
 }
 
